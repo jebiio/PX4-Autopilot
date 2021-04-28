@@ -37,6 +37,7 @@ px4_add_board(
 		lights # all available light drivers
 		lights/rgbled_pwm
 		madang
+		madang_serial
 		magnetometer # all available magnetometer drivers
 		optical_flow # all available optical flow drivers
 		osd
