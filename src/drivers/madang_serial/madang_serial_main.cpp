@@ -108,7 +108,7 @@ Setup/usage information: https://docs.px4.io/master/en/sensor/leddar_one.html
 ### Examples
 
 Attempt to start driver on a specified serial device.
-$ madang_serial start -d /dev/ttyS4
+$ madang_serial start -d /dev/ttyS3
 Stop driver
 $ madang_serial stop
 )DESCR_STR");

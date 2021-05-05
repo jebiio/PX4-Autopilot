@@ -117,14 +117,11 @@ public:
 	 */
 	void stop();
 
-private:
+	int get_instance_id() { return 1;}
+	bool _task_should_exit;
+	int get_uart_fd() { return _file_descriptor; }
 
-	/**
-	 * Calculates the 16 byte crc value for the data frame.
-	 * @param data_frame The data frame to compute a checksum for.
-	 * @param crc16_length The length of the data frame.
-	 */
-	uint16_t crc16_calc(const unsigned char *data_frame, const uint8_t crc16_length);
+private:
 
 	/**
 	 * Reads the data measrurement from serial UART.
@@ -157,4 +154,5 @@ private:
 
 	perf_counter_t _comms_error{perf_alloc(PC_COUNT, MODULE_NAME": comms_error")};
 	perf_counter_t _sample_perf{perf_alloc(PC_ELAPSED, MODULE_NAME": sample")};
+	pthread_t		_receive_thread {};
 };

@@ -38,6 +38,7 @@
 #include <string.h>
 
 #include <lib/drivers/device/Device.hpp>
+#include "MadangReceiver.hpp"
 
 MadangSerial::MadangSerial(const char *serial_port, uint8_t device_orientation):
 	ScheduledWorkItem(MODULE_NAME, px4::serial_port_to_wq(serial_port))
@@ -64,26 +65,6 @@ MadangSerial::~MadangSerial()
 	perf_free(_sample_perf);
 }
 
-uint16_t
-MadangSerial::crc16_calc(const unsigned char *data_frame, const uint8_t crc16_length)
-{
-	uint16_t crc = 0xFFFF;
-
-	for (uint8_t i = 0; i < crc16_length; i++) {
-		crc ^= data_frame[i];
-
-		for (uint8_t j = 0; j < 8; j++) {
-			if (crc & 1) {
-				crc = (crc >> 1) ^ 0xA001;
-
-			} else {
-				crc >>= 1;
-			}
-		}
-	}
-
-	return crc;
-}
 
 int
 MadangSerial::collect()
@@ -92,6 +73,12 @@ MadangSerial::collect()
 
 	const int buffer_size = sizeof(_buffer);
 	const int message_size = sizeof(reading_msg);
+
+	uint8_t _wbuffer[10] = "Hello";
+	uint8_t _wbuffer_len = 10;
+
+	int bytes = ::write(_file_descriptor, _wbuffer, _wbuffer_len);
+	PX4_ERR("madang -> collet() -> write() : %d", bytes);
 
 	int bytes_read = ::read(_file_descriptor, _buffer + _buffer_len, buffer_size - _buffer_len);
 
@@ -114,15 +101,6 @@ MadangSerial::collect()
 	    msg->function != MODBUS_READING_FUNCTION) {
 
 		PX4_ERR("slave address or function read error");
-		perf_count(_comms_error);
-		perf_end(_sample_perf);
-		return measure();
-	}
-
-	const uint16_t crc16 = crc16_calc(_buffer, buffer_size - 2);
-
-	if (crc16 != msg->crc) {
-		PX4_ERR("crc error");
 		perf_count(_comms_error);
 		perf_end(_sample_perf);
 		return measure();
@@ -265,6 +243,8 @@ MadangSerial::open_serial_port(const speed_t speed)
 	tcflush(_file_descriptor, TCIOFLUSH);
 
 	PX4_DEBUG("opened UART port %s", _serial_port);
+
+	MadangReceiver::receive_start(&_receive_thread, this);
 
 	return PX4_OK;
 }
