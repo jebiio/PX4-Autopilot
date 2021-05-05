@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *   Copyright (c) 2017-2019 PX4 Development Team. All rights reserved.
+ *   Copyright (C) 2017-2019 Intel Corporation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,158 +31,138 @@
  *
  ****************************************************************************/
 
-#include "madangserial.hpp"
+#include "Madang.hpp"
 
 #include <px4_platform_common/getopt.h>
+#include <px4_platform_common/module.h>
 
-/**
- * Local functions in support of the shell command.
- */
-namespace madangserial
+namespace madang_serial
 {
 
-MadangSerial	*g_dev{nullptr};
+MadangSerial *g_dev{nullptr};
 
-int start(const char *port);
-int status();
-int stop();
-int usage();
-
-int
-start(const char *port)
+static int start(const char *port, const uint8_t rotation)
 {
 	if (g_dev != nullptr) {
 		PX4_ERR("already started");
-		return PX4_OK;
-	}
-
-	// Instantiate the driver.
-	g_dev = new MadangSerial(port);
-
-	if (g_dev == nullptr) {
-		PX4_ERR("driver start failed");
 		return PX4_ERROR;
 	}
 
-	if (OK != g_dev->init()) {
+	g_dev = new MadangSerial(port, rotation);
+
+	if (g_dev == nullptr) {
+		PX4_ERR("object instantiate failed");
+		return PX4_ERROR;
+	}
+
+	// Initialize the sensor.
+	if (g_dev->init() != PX4_OK) {
 		PX4_ERR("driver start failed");
 		delete g_dev;
 		g_dev = nullptr;
 		return PX4_ERROR;
 	}
 
+	// Start the driver.
+	g_dev->start();
+
 	return PX4_OK;
 }
 
-int
-status()
+static int status()
 {
 	if (g_dev == nullptr) {
 		PX4_ERR("driver not running");
-		return 1;
+		return PX4_ERROR;
 	}
 
-	printf("state @ %p\n", g_dev);
 	g_dev->print_info();
 
-	return 0;
-}
-
-int stop()
-{
-	if (g_dev != nullptr) {
-		PX4_INFO("stopping driver");
-		delete g_dev;
-		g_dev = nullptr;
-		PX4_INFO("driver stopped");
-
-	} else {
-		PX4_ERR("driver not running");
-		return 1;
-	}
-
 	return PX4_OK;
 }
 
-int
-usage()
+static int stop()
+{
+	if (g_dev != nullptr) {
+		delete g_dev;
+		g_dev = nullptr;
+
+	}
+
+	PX4_INFO("driver stopped");
+	return PX4_OK;
+}
+
+static int usage()
 {
 	PRINT_MODULE_DESCRIPTION(
 		R"DESCR_STR(
 ### Description
 
-Serial bus driver for MadangSerial.
+Serial bus driver for the LeddarOne LiDAR.
 
-Most boards are configured to enable/start the driver on a specified UART using the SENS_TFMINI_CFG parameter.
+Most boards are configured to enable/start the driver on a specified UART using the SENS_LEDDAR1_CFG parameter.
 
-Setup/usage information: https://docs.px4.io/master/en/sensor/tfmini.html
+Setup/usage information: https://docs.px4.io/master/en/sensor/leddar_one.html
 
 ### Examples
 
 Attempt to start driver on a specified serial device.
-$ madangserial start -d /dev/ttyS1
+$ madang_serial start -d /dev/ttyS4
 Stop driver
-$ MadangSerial stop
+$ madang_serial stop
 )DESCR_STR");
 
-	PRINT_MODULE_USAGE_NAME("MadangSerial", "driver");
+	PRINT_MODULE_USAGE_NAME("madang_serial", "driver");
 	PRINT_MODULE_USAGE_SUBCATEGORY("distance_sensor");
-	PRINT_MODULE_USAGE_COMMAND_DESCR("start","Start driver");
+	PRINT_MODULE_USAGE_COMMAND_DESCR("start", "Start driver");
 	PRINT_MODULE_USAGE_PARAM_STRING('d', nullptr, nullptr, "Serial device", false);
-	//PRINT_MODULE_USAGE_PARAM_INT('R', 25, 0, 25, "Sensor rotation - downward facing by default", true);
-	PRINT_MODULE_USAGE_COMMAND_DESCR("status","Driver status");
-	PRINT_MODULE_USAGE_COMMAND_DESCR("stop","Stop driver");
-	PRINT_MODULE_USAGE_COMMAND_DESCR("test","Test driver (basic functional tests)");
-	PRINT_MODULE_USAGE_COMMAND_DESCR("status","Print driver status");
+	PRINT_MODULE_USAGE_PARAM_INT('r', 25, 0, 25, "Sensor rotation - downward facing by default", true);
+	PRINT_MODULE_USAGE_COMMAND_DESCR("stop", "Stop driver");
 	return PX4_OK;
 }
 
 } // namespace
 
-extern "C" __EXPORT int madangserial_main(int argc, char *argv[])
+extern "C" __EXPORT int madang_serial_main(int argc, char *argv[])
 {
-	int ch = 0;
-	//uint8_t rotation = distance_sensor_s::ROTATION_DOWNWARD_FACING;
-	const char *device_path = MADANGSERIAL_DEFAULT_PORT;
-	int myoptind = 1;
 	const char *myoptarg = nullptr;
 
-	while ((ch = px4_getopt(argc, argv, "R:d:", &myoptind, &myoptarg)) != EOF) {
+	int ch = 0;
+	int myoptind = 1;
+
+	const char *port = nullptr;
+	uint8_t rotation = distance_sensor_s::ROTATION_DOWNWARD_FACING;
+
+	while ((ch = px4_getopt(argc, argv, "d:r", &myoptind, &myoptarg)) != EOF) {
 		switch (ch) {
-		case 'R':
-			//rotation = (uint8_t)atoi(myoptarg);
+		case 'd':
+			port = myoptarg;
 			break;
 
-		case 'd':
-			device_path = myoptarg;
+		case 'r':
+			rotation = (uint8_t)atoi(myoptarg);
 			break;
 
 		default:
-			PX4_WARN("Unknown option!");
-			return PX4_ERROR;
+			PX4_WARN("Unknown option");
+			return madang_serial::usage();
 		}
 	}
 
 	if (myoptind >= argc) {
-		PX4_ERR("unrecognized command");
-		return madangserial::usage();
+		return madang_serial::usage();
 	}
 
 	if (!strcmp(argv[myoptind], "start")) {
-		if (strcmp(device_path, "") != 0) {
-			return madangserial::start(device_path);
-
-		} else {
-			PX4_WARN("Please specify device path!");
-			return madangserial::usage();
-		}
-
-	} else if (!strcmp(argv[myoptind], "stop")) {
-		return madangserial::stop();
+		return madang_serial::start(port, rotation);
 
 	} else if (!strcmp(argv[myoptind], "status")) {
-		return madangserial::status();
+		return madang_serial::status();
+
+	} else if (!strcmp(argv[myoptind], "stop")) {
+		return madang_serial::stop();
 	}
 
-	return madangserial::usage();
+	return madang_serial::usage();
 }

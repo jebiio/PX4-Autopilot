@@ -1,6 +1,6 @@
 ############################################################################
 #
-#   Copyright (c) 2017-2019 PX4 Development Team. All rights reserved.
+#   Copyright (C) 2017-2019 Intel Corporation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -32,10 +32,13 @@
 ############################################################################
 px4_add_module(
 	MODULE drivers__madang_serial
-	MAIN madangserial
+	MAIN madang_serial
+	COMPILE_FLAGS
+		-Wno-cast-align # TODO: fix and enable
 	SRCS
-		madangserial.cpp
-		madangserial_main.cpp
+		Madang.cpp
+		Madang.hpp
+		madang_serial_main.cpp
 	MODULE_CONFIG
 		module.yaml
 	DEPENDS
