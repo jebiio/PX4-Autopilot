@@ -42,6 +42,12 @@
 #define DWM_API_LABEL_LEN_MAX 			16
 #define DWM_API_UWB_SCAN_RESULT_CNT_MAX 16
 #define DWM_API_BH_ORIGIN_CNT_MAX 		9
+
+#define RESP_ERRNO_LEN           3
+#define RESP_DAT_TYPE_OFFSET     RESP_ERRNO_LEN
+#define RESP_DAT_LEN_OFFSET      RESP_DAT_TYPE_OFFSET+1
+#define RESP_DAT_VALUE_OFFSET    RESP_DAT_LEN_OFFSET+1
+
 /********************************************************************************************************************/
 /*                                                     API LIST                                                     */
 /********************************************************************************************************************/

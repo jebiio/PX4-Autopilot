@@ -39,6 +39,7 @@
 
 #include <lib/drivers/device/Device.hpp>
 #include "MadangReceiver.hpp"
+#include "dwm1001_tlv.h"
 
 MadangSerial::MadangSerial(const char *serial_port, uint8_t device_orientation):
 	ScheduledWorkItem(MODULE_NAME, px4::serial_port_to_wq(serial_port))
@@ -58,7 +59,23 @@ MadangSerial::MadangSerial(const char *serial_port, uint8_t device_orientation):
 
 MadangSerial::~MadangSerial()
 {
+	_task_should_exit = true;
+
 	stop();
+
+	unsigned i = 0;
+
+		do {
+			/* wait 20ms */
+			px4_usleep(20000);
+
+			/* if we have given up, kill it */
+			if (++i > 50) {
+				//TODO store main task handle in Mavlink instance to allow killing task
+				//task_delete(_mavlink_task);
+				break;
+			}
+	} while (1);
 
 	free((char *)_serial_port);
 	perf_free(_comms_error);
@@ -69,42 +86,37 @@ MadangSerial::~MadangSerial()
 int
 MadangSerial::collect()
 {
+	// #define DWM1001_TLV_MAX_SIZE           255
+	// #define DWM1001_TLV_TYPE_CMD_POS_GET               0x02
+
 	perf_begin(_sample_perf);
 
-	const int buffer_size = sizeof(_buffer);
-	const int message_size = sizeof(reading_msg);
-
-	uint8_t _wbuffer[10] = "Hello";
-	uint8_t _wbuffer_len = 10;
-
-	int bytes = ::write(_file_descriptor, _wbuffer, _wbuffer_len);
-	PX4_ERR("madang -> collet() -> write() : %d", bytes);
-
-	int bytes_read = ::read(_file_descriptor, _buffer + _buffer_len, buffer_size - _buffer_len);
-
-	if (bytes_read < 1) {
-		// Trigger a new measurement.
-		return measure();
+	int bytes = 0;
+   	uint8_t tx_data[DWM1001_TLV_MAX_SIZE], tx_len = 0;
+   	tx_data[tx_len++] = DWM1001_TLV_TYPE_CMD_POS_GET;
+   	tx_data[tx_len++] = 0;
+	if(position_requesting == true){
+		//return 0;
 	}
 
-	_buffer_len += bytes_read;
-
-	if (_buffer_len < message_size) {
-		// Return on next scheduled cycle to collect remaining data.
-		return PX4_OK;
+	bytes = ::write(_file_descriptor, tx_data, tx_len);
+	if (bytes > 0) {
+		PX4_INFO("Local Position ready?");
+		//PX4_INFO("request : %d bytes", bytes);
+		position_requesting = true;
+	} else {
+		PX4_ERR("madang -> collet() -> write() 0 bytes");
 	}
 
-	reading_msg *msg {nullptr};
-	msg = (reading_msg *)_buffer;
+	// uint8_t _wbuffer[10] = "Hello";
+	// uint8_t _wbuffer_len = 10;
 
-	if (msg->slave_addr != MODBUS_SLAVE_ADDRESS ||
-	    msg->function != MODBUS_READING_FUNCTION) {
-
-		PX4_ERR("slave address or function read error");
-		perf_count(_comms_error);
-		perf_end(_sample_perf);
-		return measure();
-	}
+	// bytes = ::write(_file_descriptor, _wbuffer, _wbuffer_len);
+	// if (bytes > 0) {
+	// 	PX4_INFO("madang -> collet() -> write() : %d", bytes);
+	// } else {
+	// 	PX4_ERR("madang -> collet() -> write() 0 bytes");
+	// }
 
 	// NOTE: little-endian support only.
 	 // distance_mm = (msg->first_dist_high_byte << 8 | msg->first_dist_low_byte);
@@ -112,8 +124,6 @@ MadangSerial::collect()
 
 	// @TODO - implement a meaningful signal quality value.
 	//int8_t signal_quality = -1;
-
-
 
 	perf_end(_sample_perf);
 
@@ -156,7 +166,9 @@ int
 MadangSerial::measure()
 {
 	// Flush the receive buffer.
-	tcflush(_file_descriptor, TCIFLUSH);
+	//tcflush(_file_descriptor, TCIFLUSH);
+	return PX4_OK;
+
 
 	int num_bytes = ::write(_file_descriptor, request_reading_msg, sizeof(request_reading_msg));
 
@@ -281,4 +293,9 @@ MadangSerial::stop()
 
 	// Clear the work queue schedule.
 	ScheduleClear();
+}
+
+int MadangSerial::task_main(int argc, char *argv[])
+{
+	return 0;
 }

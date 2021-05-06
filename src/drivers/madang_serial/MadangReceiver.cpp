@@ -5,7 +5,7 @@
 
 #include "Madang.hpp"
 #include "MadangReceiver.hpp"
-
+#include "dwm_api.h"
 
 
 MadangReceiver::~MadangReceiver()
@@ -56,8 +56,9 @@ MadangReceiver::Run()
 		snprintf(thread_name, sizeof(thread_name), "madang_rcv_if%d", _madang->get_instance_id());
 		px4_prctl(PR_SET_NAME, thread_name, px4_getpid());
 	}
-	uint8_t buf[64];
+	uint8_t rx_data[255];
 	ssize_t nread = 0;
+	dwm_pos_t p_pos;
 	//hrt_abstime last_send_update = 0;
 
 	struct pollfd fds[1] = {};
@@ -70,10 +71,33 @@ MadangReceiver::Run()
 
 		if (ret > 0) {
 			/* non-blocking read. read may return negative values */
-			nread = ::read(fds[0].fd, buf, sizeof(buf));
-
+			nread = ::read(fds[0].fd, rx_data, 255);
+			PX4_ERR("Got Postion Data!!! ------------- ");
 			if (nread == -1 && errno == ENOTCONN) { // Not connected (can happen for USB)
 				usleep(100000);
+			}
+			else if (nread == 18) { //(nread == 18) {
+				uint8_t data_cnt = RESP_DAT_VALUE_OFFSET;
+				p_pos.x = rx_data[data_cnt]
+					+ (rx_data[data_cnt+1]<<8)
+					+ (rx_data[data_cnt+2]<<16)
+					+ (rx_data[data_cnt+3]<<24);
+				data_cnt += 4;
+				p_pos.y = rx_data[data_cnt]
+					+ (rx_data[data_cnt+1]<<8)
+					+ (rx_data[data_cnt+2]<<16)
+					+ (rx_data[data_cnt+3]<<24);
+				data_cnt += 4;
+				p_pos.z = rx_data[data_cnt]
+					+ (rx_data[data_cnt+1]<<8)
+					+ (rx_data[data_cnt+2]<<16)
+					+ (rx_data[data_cnt+3]<<24);
+				data_cnt += 4;
+				p_pos.qf = rx_data[data_cnt];
+				PX4_INFO("Local Position : x: %d, y: %d, z: %d -------", p_pos.x, p_pos.y, p_pos.z);
+				_madang->position_requesting = false;
+				tcflush(_madang->get_uart_fd(), TCIOFLUSH);
+				memset(rx_data, 1, 255);
 			}
 		} else {
 			PX4_ERR("madang receiver timeout! ");

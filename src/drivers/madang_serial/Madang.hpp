@@ -49,7 +49,7 @@ using namespace time_literals;
 #define LEDDAR_ONE_MAX_DISTANCE         40.0f
 #define LEDDAR_ONE_MIN_DISTANCE         0.01f
 
-#define LEDDAR_ONE_MEASURE_INTERVAL     100_ms // 10Hz
+#define LEDDAR_ONE_MEASURE_INTERVAL     80_ms // 13Hz
 
 #define MODBUS_SLAVE_ADDRESS            0x01
 #define MODBUS_READING_FUNCTION         0x04
@@ -118,9 +118,11 @@ public:
 	void stop();
 
 	int get_instance_id() { return 1;}
-	bool _task_should_exit;
+	bool _task_should_exit{false};
+	bool _task_running{true};
 	int get_uart_fd() { return _file_descriptor; }
-
+	int task_main(int argc, char *argv[]);
+	bool position_requesting{false};
 private:
 
 	/**
@@ -155,4 +157,6 @@ private:
 	perf_counter_t _comms_error{perf_alloc(PC_COUNT, MODULE_NAME": comms_error")};
 	perf_counter_t _sample_perf{perf_alloc(PC_ELAPSED, MODULE_NAME": sample")};
 	pthread_t		_receive_thread {};
+	MadangSerial(const MadangSerial &) = delete;
+	MadangSerial operator=(const MadangSerial &) = delete;
 };

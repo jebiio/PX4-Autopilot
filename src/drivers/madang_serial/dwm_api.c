@@ -13,11 +13,6 @@
 //#include "dwm_api.h"
 #include <string.h>
 
-#define RESP_ERRNO_LEN           3
-#define RESP_DAT_TYPE_OFFSET     RESP_ERRNO_LEN
-#define RESP_DAT_LEN_OFFSET      RESP_DAT_TYPE_OFFSET+1
-#define RESP_DAT_VALUE_OFFSET    RESP_DAT_LEN_OFFSET+1
-
 void dwm_init(void)
 {
    LMH_Init();
