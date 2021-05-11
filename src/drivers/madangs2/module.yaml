@@ -1,0 +1,6 @@
+module_name: MadangSerial
+serial_config:
+    - command: madang_serial start -d ${SERIAL_DEV}
+      port_config_param:
+        name: SENS_MADANG_CFG
+        group: Sensors
