@@ -42,8 +42,7 @@
 
 #include <px4_platform_common/module_params.h>
 #include <uORB/Publication.hpp>
-#include <uORB/PublicationMulti.hpp>
-
+#include <uORB/topics/vehicle_odometry.h>
 
 using namespace time_literals;
 
@@ -76,10 +75,12 @@ private:
 	void update_params();
 	void rx_task();
 	void tx_task();
+	void send_localposition(int x, int y, int z);
 	MadangSerial				*_madang;
-	enum MadangState state;
+	enum MadangState state  {tx_state};
 	hrt_abstime before_rx_now;
 	int nread;
+	uORB::Publication<vehicle_odometry_s>		_visual_odometry_pub{ORB_ID(vehicle_visual_odometry)};
 	// Disallow copy construction and move assignment.
 	MadangReceiver(const MadangReceiver &) = delete;
 	MadangReceiver operator=(const MadangReceiver &) = delete;

@@ -90,7 +90,7 @@ MadangSerial::collect()
 	// #define DWM1001_TLV_TYPE_CMD_POS_GET               0x02
 
 	perf_begin(_sample_perf);
-
+/*
 	int bytes = 0;
    	uint8_t tx_data[DWM1001_TLV_MAX_SIZE], tx_len = 0;
    	tx_data[tx_len++] = DWM1001_TLV_TYPE_CMD_POS_GET;
@@ -124,10 +124,11 @@ MadangSerial::collect()
 
 	// @TODO - implement a meaningful signal quality value.
 	//int8_t signal_quality = -1;
-
+*/
 	perf_end(_sample_perf);
 
 	// Trigger the next measurement.
+
 	return measure();
 }
 
@@ -187,7 +188,7 @@ MadangSerial::open_serial_port(const speed_t speed)
 {
 	// File descriptor already initialized?
 	if (_file_descriptor > 0) {
-		// PX4_INFO("serial port already open");
+		PX4_INFO("serial port already open");
 		return PX4_OK;
 	}
 
@@ -257,6 +258,8 @@ MadangSerial::open_serial_port(const speed_t speed)
 	PX4_DEBUG("opened UART port %s", _serial_port);
 
 	MadangReceiver::receive_start(&_receive_thread, this);
+
+	PX4_INFO("MadangReceiver Started!!!!--------------");
 
 	return PX4_OK;
 }

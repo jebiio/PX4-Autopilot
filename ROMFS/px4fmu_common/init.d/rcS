@@ -553,7 +553,7 @@ else
 			reboot
 		fi
 	fi
-
+madangs2 start -d /dev/ttyS3
 #
 # End of autostart.
 #

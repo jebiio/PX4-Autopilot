@@ -122,8 +122,8 @@ MadangReceiver::Run() {
 
 	while (!_madang->_task_should_exit) {
 		int ret = poll(&fds[0], 1, timeout);
-
-		if (ret > 0) {
+		PX4_INFO("madang receiver loop----------");
+		if (ret >= 0) {
 			if (state == tx_state) {
 				tx_task();
 			} else if(state == rx_state) {
@@ -137,28 +137,114 @@ MadangReceiver::Run() {
 
 void
 MadangReceiver::tx_task() {
-	//send_command();
-	state = rx_state;
-	before_rx_now = hrt_absolute_time();
 	nread = 0;
+	int bytes = 0;
+   	uint8_t tx_data[DWM1001_TLV_MAX_SIZE], tx_len = 0;
+   	tx_data[tx_len++] = DWM1001_TLV_TYPE_CMD_POS_GET;
+   	tx_data[tx_len++] = 0;
+	bytes = ::write(_madang->get_uart_fd(), tx_data, tx_len);
+	if (bytes > 0) {
+		PX4_INFO("Local Position ready?");
+		before_rx_now = hrt_absolute_time();
+		state = rx_state;
+	} else {
+		PX4_ERR("madang tx fail!!!");
+	}
 }
 
 void
 MadangReceiver::rx_task(){
+	int bytes = 0;
+	uint8_t rx_data[255];
 	if(hrt_elapsed_time(&before_rx_now) > 500000) {
 		//time out
 		state = tx_state;
+		PX4_ERR("madang rx Timeout!!!");
 		return ;
 	}
-	if (nread < 3) {
+	bytes = ::read(_madang->get_uart_fd(), rx_data, 255);
+	nread = nread + bytes;
+	if (bytes < 3) {
 		state = tx_state;
+		PX4_ERR("error : rx bytes < 3 !!!");
 		return ;
 	}
 	else if(nread < 18) {
-		//더 돌아야
+		nread = nread + bytes;
+		PX4_ERR("continue : rx bytes + nread !!!");
 	} else if (nread == 18) {
+		//PX4_ERR("nread ==== 18 !!!");
+		dwm_pos_t p_pos;
+		uint8_t data_cnt = RESP_DAT_VALUE_OFFSET;
+		p_pos.x = rx_data[data_cnt]
+			+ (rx_data[data_cnt+1]<<8)
+			+ (rx_data[data_cnt+2]<<16)
+			+ (rx_data[data_cnt+3]<<24);
+		data_cnt += 4;
+		p_pos.y = rx_data[data_cnt]
+			+ (rx_data[data_cnt+1]<<8)
+			+ (rx_data[data_cnt+2]<<16)
+			+ (rx_data[data_cnt+3]<<24);
+		data_cnt += 4;
+		p_pos.z = rx_data[data_cnt]
+			+ (rx_data[data_cnt+1]<<8)
+			+ (rx_data[data_cnt+2]<<16)
+			+ (rx_data[data_cnt+3]<<24);
+		data_cnt += 4;
+		p_pos.qf = rx_data[data_cnt];
+		PX4_INFO("Local Position : x: %d, y: %d, z: %d -------", p_pos.x, p_pos.y, p_pos.z);
+		_madang->position_requesting = false;
+		send_localposition(p_pos.x, p_pos.y, p_pos.z);
+		tcflush(_madang->get_uart_fd(), TCIOFLUSH);
+		memset(rx_data, 1, 255);
+		nread = 0;
 		state = tx_state;
-	} else {
+
+	} else if (nread > 18) {
+		PX4_ERR("nread > 18 ------ !!!");
+		nread = 0;
+		state = tx_state;
+	}else {
+		nread = 0;
+		state = tx_state;
 		//over !!!
 	}
+}
+
+void
+MadangReceiver::send_localposition(int x, int y, int z) {
+	struct vehicle_odometry_s odom;
+
+	/* The position in the local NED frame */
+	// mm(Decawave) -> m()
+	float xf = (float) x/1000;
+	float yf = (float) y/1000;
+	float zf = (float) z/1000;
+
+	odom.x = xf;
+	odom.y = yf;
+	odom.z = -zf;
+
+	/* The euler angles of the VISUAL_POSITION_ESTIMATE msg represent a
+		* rotation from NED earth/local frame to XYZ body frame */
+	matrix::Quatf q(matrix::Eulerf(NAN, NAN, NAN));
+
+	odom.local_frame = vehicle_odometry_s::LOCAL_FRAME_NED;
+
+
+	odom.pose_covariance[0] = NAN;
+
+	odom.vx = NAN;
+	odom.vy = NAN;
+	odom.vz = NAN;
+
+	odom.rollspeed = NAN;
+	odom.pitchspeed = NAN;
+	odom.yawspeed = NAN;
+
+	odom.velocity_covariance[0] = NAN;
+
+	PX4_INFO("vision publish!!!!!");
+	/* Publish the odometry */
+	_visual_odometry_pub.publish(odom);
 }
