@@ -214,7 +214,6 @@ MadangReceiver::rx_task(){
 void
 MadangReceiver::send_localposition(int x, int y, int z) {
 	struct vehicle_odometry_s odom;
-
 	/* The position in the local NED frame */
 	// mm(Decawave) -> m()
 	float xf = (float) x/1000;
@@ -245,6 +244,7 @@ MadangReceiver::send_localposition(int x, int y, int z) {
 	odom.velocity_covariance[0] = NAN;
 
 	PX4_INFO("vision publish!!!!!");
+	odom.timestamp = hrt_absolute_time();
 	/* Publish the odometry */
 	_visual_odometry_pub.publish(odom);
 }
