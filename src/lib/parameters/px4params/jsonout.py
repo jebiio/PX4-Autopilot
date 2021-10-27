@@ -24,6 +24,7 @@ class JsonOutput():
         schema_map_fix_type = {
 			"reboot_required": ("rebootRequired", bool),
 			"decimal": ("decimalPlaces", int),
+            "encryption":("encryption", bool),
 			}
         allowed_types = { "Uint8", "Int8", "Uint16", "Int16", "Uint32", "Int32", "Float"}
 

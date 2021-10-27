@@ -45,5 +45,13 @@ static constexpr params parameters_volatile[] = {
 {% endfor %}
 };
 
-
+static constexpr bool parameters_encryption[] = {
+{% for param in params %}
+	{%- if param.attrib["encryption"] == "true" %}
+		true,
+	{%- else %}
+		false,
+	{%- endif -%}
+{% endfor %}
+};
 } // namespace px4

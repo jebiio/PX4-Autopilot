@@ -39,6 +39,7 @@ class XMLOutput():
                     xml_param.attrib["name"] = param.GetName()
                     xml_param.attrib["default"] = param.GetDefault()
                     xml_param.attrib["type"] = param.GetType()
+                    xml_param.attrib["encryption"] = param.GetFieldValue("encryption")
                     if param.GetVolatile():
                         xml_param.attrib["volatile"] = "true"
                     if param.GetBoolean():
@@ -60,7 +61,7 @@ class XMLOutput():
                             xml_field.text = value
                 if last_param_name != param.GetName():
                     board_specific_param_set = False
-                
+
                 if len(param.GetEnumCodes()) > 0:
                     xml_values = ET.SubElement(xml_param, "values")
                     for code in param.GetEnumCodes():

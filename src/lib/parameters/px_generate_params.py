@@ -40,6 +40,16 @@ def generate(xml_file, dest='.'):
 
     params = sorted(params, key=lambda name: name.attrib["name"])
 
+    encs = []
+    for p in params:
+        e = p.find('encryption')
+        if e is None:
+            encs.append(False)
+        else:
+            if e.text == 'true':
+                encs.append(True)
+    print(encs)
+
     script_path = os.path.dirname(os.path.realpath(__file__))
 
     # for jinja docs see: http://jinja.pocoo.org/docs/2.9/api/

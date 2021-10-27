@@ -186,7 +186,7 @@ class SourceParser(object):
     re_remove_dots = re.compile(r'\.+$')
     re_remove_carriage_return = re.compile('\n+')
 
-    valid_tags = set(["group", "board", "min", "max", "unit", "decimal", "increment", "reboot_required", "value", "boolean", "bit", "category", "volatile"])
+    valid_tags = set(["group", "board", "min", "max", "unit", "decimal", "increment", "reboot_required", "value", "boolean", "bit", "category", "volatile", "encryption"])
 
     # Order of parameter groups
     priority = {
@@ -384,6 +384,7 @@ class SourceParser(object):
                 min = param.GetFieldValue("min")
                 max = param.GetFieldValue("max")
                 units = param.GetFieldValue("unit")
+                encryption = param.GetFieldValue("encryption")
                 if units not in allowedUnits:
                     sys.stderr.write("Invalid unit in {0}: {1}\n".format(name, units))
                     return False

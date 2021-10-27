@@ -67,6 +67,7 @@ PARAM_DEFINE_INT32(ASPD_TAS_GATE, 3);
  * @min 1
  * @max 5
  * @unit SD
+ * @encryption true
  * @group Airspeed Validator
  */
 PARAM_DEFINE_INT32(ASPD_BETA_GATE, 1);
