@@ -66,7 +66,7 @@ def generate(xml_file, dest='.'):
         template = env.get_template(template_file)
         with open(os.path.join(
                 dest, template_file.replace('.jinja','')), 'w') as fid:
-            fid.write(template.render(params=params))
+            fid.write(template.render(params=params, encs=encs))
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()

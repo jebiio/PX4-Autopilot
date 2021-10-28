@@ -406,6 +406,11 @@ param_type_t param_type(param_t param)
 	return handle_in_range(param) ? px4::parameters_type[param] : PARAM_TYPE_UNKNOWN;
 }
 
+bool param_encryption(param_t param)
+{
+	return handle_in_range(param) ? px4::parameters_encryption[param] : false;
+}
+
 bool param_is_volatile(param_t param)
 {
 	if (handle_in_range(param)) {
@@ -513,7 +518,17 @@ param_get(param_t param, void *val)
 		const void *v = param_get_value_ptr(param);
 
 		if (v) {
-			memcpy(val, v, param_size(param));
+			if (param_encryption(param))
+			{
+			    // v->val
+			    //4 bytes ->
+			    // temp = *v
+			    float vs = float_fpe_encryption(temp);
+			    memcpy(val, &vs, param_size(param));
+			}
+			else {
+				memcpy(val, v, param_size(param));
+			}
 			result = PX4_OK;
 		}
 
@@ -782,7 +797,13 @@ param_set_internal(param_t param, const void *val, bool mark_saved, bool notify_
 			switch (param_type(param)) {
 			case PARAM_TYPE_INT32:
 				param_changed = param_changed || s->val.i != *(int32_t *)val;
-				s->val.i = *(int32_t *)val;
+				//subak
+				if(param_encryption(param)) {
+					//s->val.i = (int32_t)uint32_t_fpe_encryption(*(uint32_t *)val);
+				}
+				else {
+					s->val.i = *(int32_t *)val;
+				}
 				s->unsaved = !mark_saved;
 				params_changed.set(param, true);
 				result = PX4_OK;
@@ -790,7 +811,12 @@ param_set_internal(param_t param, const void *val, bool mark_saved, bool notify_
 
 			case PARAM_TYPE_FLOAT:
 				param_changed = param_changed || fabsf(s->val.f - * (float *)val) > FLT_EPSILON;
-				s->val.f = *(float *)val;
+				if (param_encryption(param)) {
+
+				}
+				else {
+					s->val.f = *(float *)val;
+				}
 				s->unsaved = !mark_saved;
 				params_changed.set(param, true);
 				result = PX4_OK;

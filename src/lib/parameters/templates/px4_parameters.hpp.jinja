@@ -54,4 +54,14 @@ static constexpr bool parameters_encryption[] = {
 	{%- endif -%}
 {% endfor %}
 };
+
+static constexpr bool parameters_encryption2[] = {
+{% for e in encs %}
+	{%- if e == True %}
+		true,
+	{%- else %}
+		false,
+	{%- endif -%}
+{% endfor %}
+};
 } // namespace px4
