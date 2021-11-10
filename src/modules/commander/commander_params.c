@@ -52,6 +52,7 @@
  * @group Radio Calibration
  * @min -0.25
  * @max 0.25
+ * @encryption true
  * @decimal 2
  * @increment 0.01
  */

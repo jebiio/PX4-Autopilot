@@ -496,16 +496,42 @@ param_get_value_ptr(param_t param)
 	return nullptr;
 }
 
-uint32_t uint32_t_fpe_decryption(uint32_t param)
+int32_t int32_t_fpe_decryption(int32_t val)
 {
-	printf("param uint32 decryption : ------------------\n");
-	return param - 1;
+	uint32_t v = 0x11;
+	printf("decryption source : %d \n", val);
+	//printf("param uint32 decryption : ------------------\n");
+	printf("decrypted source : %d \n", (val ^ v));
+	return (val ^ v);
 }
 
-uint32_t uint32_t_fpe_encryption(uint32_t param)
+int32_t int32_t_fpe_encryption(int32_t val)
 {
-	printf("param uint32 encryption : ------------------\n");
-	return param + 1;
+	//printf("param uint32 encryption : ------------------\n");
+	printf("encryption source : %d \n", val);
+	int32_t v = 0x11;
+	printf("encryptted source : %d \n", (val^v));
+	return (val ^ v);
+}
+
+float float_fpe_decryption(float val)
+{
+	// uint32_t v = 0x11;
+	// printf("decryption source : %d \n", val);
+	// //printf("param uint32 decryption : ------------------\n");
+	// printf("decrypted source : %d \n", (val ^ v));
+	float a = 1.0;
+	return (val + a);
+}
+
+float float_fpe_encryption(float val)
+{
+	//printf("param uint32 encryption : ------------------\n");
+	// printf("encryption source : %d \n", val);
+	// int32_t v = 0x11;
+	// printf("encryptted source : %d \n", (val^v));
+	float a = 1.0;
+	return (val - a);
 }
 
 int
@@ -531,10 +557,22 @@ param_get(param_t param, void *val)
 
 		if (v) {
 			if (param_encryption(param)) {
-				printf("subakio <<<<<<<<<<<< param uint32 decryption : ------------------\n");
-				uint32_t vs = (int32_t)uint32_t_fpe_decryption(*(uint32_t *)v);
-				memcpy(val, &vs, param_size(param));
+				printf("subakio <<<<<<<<<<<< param type decryption : ------------------\n");
+				switch (param_type(param)) {
+					case PARAM_TYPE_INT32:
+						{
+							int32_t vi = int32_t_fpe_decryption(*(int32_t *)v);
+							memcpy(val, &vi, param_size(param));
+						}
+						break;
 
+					case PARAM_TYPE_FLOAT:
+						{
+							float vf = float_fpe_decryption(*(float *)v);
+							memcpy(val, &vf, param_size(param));
+						}
+						break;
+				}
 			} else {
 				memcpy(val, v, param_size(param));
 			}
@@ -809,10 +847,10 @@ param_set_internal(param_t param, const void *val, bool mark_saved, bool notify_
 				param_changed = param_changed || s->val.i != *(int32_t *)val;
 
 				if (param_encryption(param)) {
-					int32_t vi = (int32_t)uint32_t_fpe_encryption(*(uint32_t *)val);
+					printf("subakio <<<<<<<<<<<< param int32 encryption : ------------------\n");
+					int32_t vi = int32_t_fpe_encryption(*(int32_t *)val);
 					param_changed = param_changed || s->val.i != vi;
 					s->val.i = vi;
-
 				} else {
 					param_changed = param_changed || s->val.i != *(int32_t *)val;
 					s->val.i = *(int32_t *)val;
@@ -825,9 +863,11 @@ param_set_internal(param_t param, const void *val, bool mark_saved, bool notify_
 
 			case PARAM_TYPE_FLOAT:
 				if (param_encryption(param)) {
-					float vf = (float)uint32_t_fpe_encryption(*(uint32_t *)val);
+					printf("subakio <<<<<<<<<<<< param float encryption : ------------------\n");
+					float vf = float_fpe_encryption(*(float *)val);
 					param_changed = param_changed || fabsf(s->val.f - vf) > FLT_EPSILON;
 					s->val.f = vf;
+					printf("----- float : %f   ------------------\n", (double)vf);
 
 				} else {
 					param_changed = param_changed || fabsf(s->val.f - * (float *)val) > FLT_EPSILON;
@@ -985,7 +1025,7 @@ int param_set_default_value(param_t param, const void *val)
 			case PARAM_TYPE_INT32:
 				if (param_encryption(param)) {
 					printf("subakio >>>>>>>>>>>>> default int32 encryption : ------------------\n");
-					s->val.i = (int32_t)uint32_t_fpe_encryption(*(uint32_t *)val);
+					s->val.i = (int32_t)int32_t_fpe_encryption(*(int32_t *)val);
 
 				} else {
 					s->val.i = *(int32_t *)val;
@@ -998,12 +1038,11 @@ int param_set_default_value(param_t param, const void *val)
 			case PARAM_TYPE_FLOAT:
 				if (param_encryption(param)) {
 					printf("subakio >>>>>>>>>>>>> default float encryption : ------------------\n");
-					s->val.f = (float)uint32_t_fpe_encryption(*(uint32_t *)val);
+					s->val.f = (float)float_fpe_encryption(*(float *)val);
 
 				} else {
 					s->val.f = *(float *)val;
 				}
-
 				params_custom_default.set(param, true);
 				result = PX4_OK;
 				break;
