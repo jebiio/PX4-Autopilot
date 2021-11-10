@@ -496,6 +496,18 @@ param_get_value_ptr(param_t param)
 	return nullptr;
 }
 
+uint32_t uint32_t_fpe_decryption(uint32_t param)
+{
+	printf("param uint32 decryption : ------------------\n");
+	return param - 1;
+}
+
+uint32_t uint32_t_fpe_encryption(uint32_t param)
+{
+	printf("param uint32 encryption : ------------------\n");
+	return param + 1;
+}
+
 int
 param_get(param_t param, void *val)
 {
@@ -518,17 +530,15 @@ param_get(param_t param, void *val)
 		const void *v = param_get_value_ptr(param);
 
 		if (v) {
-			if (param_encryption(param))
-			{
-			    // v->val
-			    //4 bytes ->
-			    // temp = *v
-			    float vs = float_fpe_encryption(temp);
-			    memcpy(val, &vs, param_size(param));
-			}
-			else {
+			if (param_encryption(param)) {
+				printf("subakio <<<<<<<<<<<< param uint32 decryption : ------------------\n");
+				uint32_t vs = (int32_t)uint32_t_fpe_decryption(*(uint32_t *)v);
+				memcpy(val, &vs, param_size(param));
+
+			} else {
 				memcpy(val, v, param_size(param));
 			}
+
 			result = PX4_OK;
 		}
 
@@ -797,26 +807,33 @@ param_set_internal(param_t param, const void *val, bool mark_saved, bool notify_
 			switch (param_type(param)) {
 			case PARAM_TYPE_INT32:
 				param_changed = param_changed || s->val.i != *(int32_t *)val;
-				//subak
-				if(param_encryption(param)) {
-					//s->val.i = (int32_t)uint32_t_fpe_encryption(*(uint32_t *)val);
-				}
-				else {
+
+				if (param_encryption(param)) {
+					int32_t vi = (int32_t)uint32_t_fpe_encryption(*(uint32_t *)val);
+					param_changed = param_changed || s->val.i != vi;
+					s->val.i = vi;
+
+				} else {
+					param_changed = param_changed || s->val.i != *(int32_t *)val;
 					s->val.i = *(int32_t *)val;
 				}
+
 				s->unsaved = !mark_saved;
 				params_changed.set(param, true);
 				result = PX4_OK;
 				break;
 
 			case PARAM_TYPE_FLOAT:
-				param_changed = param_changed || fabsf(s->val.f - * (float *)val) > FLT_EPSILON;
 				if (param_encryption(param)) {
+					float vf = (float)uint32_t_fpe_encryption(*(uint32_t *)val);
+					param_changed = param_changed || fabsf(s->val.f - vf) > FLT_EPSILON;
+					s->val.f = vf;
 
-				}
-				else {
+				} else {
+					param_changed = param_changed || fabsf(s->val.f - * (float *)val) > FLT_EPSILON;
 					s->val.f = *(float *)val;
 				}
+
 				s->unsaved = !mark_saved;
 				params_changed.set(param, true);
 				result = PX4_OK;
@@ -923,7 +940,6 @@ int param_set_default_value(param_t param, const void *val)
 	case PARAM_TYPE_INT32:
 		setting_to_static_default = (px4::parameters[param].val.i == *(int32_t *)val);
 		break;
-
 	case PARAM_TYPE_FLOAT:
 		setting_to_static_default = (fabsf(px4::parameters[param].val.f - * (float *)val) < FLT_EPSILON);
 		break;
@@ -967,13 +983,27 @@ int param_set_default_value(param_t param, const void *val)
 			// update the default value
 			switch (param_type(param)) {
 			case PARAM_TYPE_INT32:
-				s->val.i = *(int32_t *)val;
+				if (param_encryption(param)) {
+					printf("subakio >>>>>>>>>>>>> default int32 encryption : ------------------\n");
+					s->val.i = (int32_t)uint32_t_fpe_encryption(*(uint32_t *)val);
+
+				} else {
+					s->val.i = *(int32_t *)val;
+				}
+
 				params_custom_default.set(param, true);
 				result = PX4_OK;
 				break;
 
 			case PARAM_TYPE_FLOAT:
-				s->val.f = *(float *)val;
+				if (param_encryption(param)) {
+					printf("subakio >>>>>>>>>>>>> default float encryption : ------------------\n");
+					s->val.f = (float)uint32_t_fpe_encryption(*(uint32_t *)val);
+
+				} else {
+					s->val.f = *(float *)val;
+				}
+
 				params_custom_default.set(param, true);
 				result = PX4_OK;
 				break;
