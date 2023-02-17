@@ -2190,6 +2190,8 @@ Mavlink::task_main(int argc, char *argv[])
 		/* COMMAND_LONG stream: use unlimited rate to send all commands */
 		configure_stream("COMMAND_LONG");
 
+		configure_stream("KRISO_STATUS", 1.0f);
+		configure_stream("KRISO_VOL_STATUS", 1.0f);
 	}
 
 	if (configure_streams_to_default() != 0) {
