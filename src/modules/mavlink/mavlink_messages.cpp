@@ -561,8 +561,17 @@ static const StreamListItem streams_list[] = {
 	create_stream_list_item<MavlinkStreamEfiStatus>(),
 #endif // EFI_STATUS_HPP
 #if defined(GPS_RTCM_DATA_HPP)
-	create_stream_list_item<MavlinkStreamGPSRTCMData>()
+	create_stream_list_item<MavlinkStreamGPSRTCMData>(),
 #endif // GPS_RTCM_DATA_HPP
+
+#if defined(KRISO_STATUS_HPP)
+	create_stream_list_item<MavlinkStreamKRISOStatus>(),
+#endif // GPS_RTCM_DATA_HPP
+
+#if defined(KRISO_VOL_STATUS_HPP)
+	create_stream_list_item<MavlinkStreamKRISOVolStatus>()
+#endif // GPS_RTCM_DATA_HPP
+
 };
 
 const char *get_stream_name(const uint16_t msg_id)
