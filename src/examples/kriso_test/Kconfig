@@ -1,0 +1,5 @@
+menuconfig EXAMPLES_KRISO_TEST
+	bool "kriso_test"
+	default n
+	---help---
+		Enable support for kriso_test
