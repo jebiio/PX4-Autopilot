@@ -187,7 +187,44 @@ void KrisoTest::parameters_update(bool force)
 		updateParams();
 	}
 }
+	uORB::Publication<kriso_catovcc_s> _kriso_catovcc_topic{ORB_ID(kriso_catovcc)};
+	uORB::Publication<kriso_cktovcc_s> _kriso_cktovcc_topic{ORB_ID(kriso_cktovcc)};
+	uORB::Publication<kriso_controlcmdtovcc_s> _kriso_controlcmdtovcc_topic{ORB_ID(kriso_controlcmdtovcc)};
+	uORB::Publication<kriso_dptovcc_s> _kriso_dptovcc_topic{ORB_ID(kriso_dptovcc)};
+	uORB::Publication<kriso_status_s> _kriso_status_topic{ORB_ID(kriso_status)};
+	uORB::Publication<kriso_wttovcc_s> _kriso_wttovcc_topic{ORB_ID(kriso_wttovcc)};
 
+void KrisoTest::publishMsg(uint8_t type)
+{
+	switch(type){
+		case 0: {
+			kriso_catovcc_s msg{};
+			_kriso_catovcc_topic.publish(msg); }
+			break;
+		case 1: {
+			kriso_cktovcc_s msg{};
+			_kriso_cktovcc_topic.publish(msg); }
+			break;
+		case 2: {
+			kriso_controlcmdtovcc_s msg{};
+			_kriso_controlcmdtovcc_topic.publish(msg);}
+			break;
+		case 3: {
+			kriso_dptovcc_s msg{};
+			_kriso_dptovcc_topic.publish(msg); }
+			break;
+		case 4: {
+			kriso_status_s msg{};
+			_kriso_status_topic.publish(msg); }
+			break;
+		case 5: {
+			kriso_wttovcc_s msg{};
+			_kriso_wttovcc_topic.publish(msg); }
+			break;
+		default :
+			break;
+	}
+}
 int KrisoTest::print_usage(const char *reason)
 {
 	if (reason) {
@@ -219,7 +256,7 @@ $ module start -f -p 42
 	return 0;
 }
 
-int template_module_main(int argc, char *argv[])
+int kriso_test_main(int argc, char *argv[])
 {
 	return KrisoTest::main(argc, argv);
 }

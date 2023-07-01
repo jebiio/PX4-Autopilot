@@ -38,6 +38,14 @@
 #include <uORB/SubscriptionInterval.hpp>
 #include <uORB/topics/parameter_update.h>
 
+#include <uORB/Publication.hpp>
+#include <uORB/topics/kriso_catovcc.h>
+#include <uORB/topics/kriso_cktovcc.h>
+#include <uORB/topics/kriso_controlcmdtovcc.h>
+#include <uORB/topics/kriso_dptovcc.h>
+#include <uORB/topics/kriso_status.h>
+#include <uORB/topics/kriso_wttovcc.h>
+
 using namespace time_literals;
 
 extern "C" __EXPORT int kriso_test_main(int argc, char *argv[]);
@@ -83,8 +91,18 @@ private:
 		(ParamInt<px4::params::SYS_AUTOCONFIG>) _param_sys_autoconfig  /**< another parameter */
 	)
 
+	void publishMsg(uint8_t type);
+
 	// Subscriptions
 	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
+
+	// Publish
+	uORB::Publication<kriso_catovcc_s> _kriso_catovcc_topic{ORB_ID(kriso_catovcc)};
+	uORB::Publication<kriso_cktovcc_s> _kriso_cktovcc_topic{ORB_ID(kriso_cktovcc)};
+	uORB::Publication<kriso_controlcmdtovcc_s> _kriso_controlcmdtovcc_topic{ORB_ID(kriso_controlcmdtovcc)};
+	uORB::Publication<kriso_dptovcc_s> _kriso_dptovcc_topic{ORB_ID(kriso_dptovcc)};
+	uORB::Publication<kriso_status_s> _kriso_status_topic{ORB_ID(kriso_status)};
+	uORB::Publication<kriso_wttovcc_s> _kriso_wttovcc_topic{ORB_ID(kriso_wttovcc)};
 
 };
 

@@ -98,6 +98,12 @@ set(msg_files
 	input_rc.msg
 	iridiumsbd_status.msg
 	irlock_report.msg
+	kriso_catovcc.msg
+	kriso_cktovcc.msg
+	kriso_controlcmdtovcc.msg
+	kriso_dptovcc.msg
+	kriso_status.msg
+	kriso_wttovcc.msg
 	landing_gear.msg
 	landing_target_innovations.msg
 	landing_target_pose.msg
