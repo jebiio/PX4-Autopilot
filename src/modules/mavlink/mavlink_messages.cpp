@@ -117,7 +117,15 @@
 #include "streams/VFR_HUD.hpp"
 #include "streams/VIBRATION.hpp"
 #include "streams/WIND_COV.hpp"
+/*
+#include "streams/KRISO_CATOVCC.hpp"
+#include "streams/KRISO_CKTOVCC.hpp"
+#include "streams/KRISO_CONTROLCMDTOVCC.hpp"
+#include "streams/KRISO_DPTOVCC.hpp"
+#include "streams/KRISO_STATUS.hpp"
+#include "streams/KRISO_WTTOVCC.hpp"
 
+*/
 #if !defined(CONSTRAINED_FLASH)
 # include "streams/ADSB_VEHICLE.hpp"
 # include "streams/ATT_POS_MOCAP.hpp"
