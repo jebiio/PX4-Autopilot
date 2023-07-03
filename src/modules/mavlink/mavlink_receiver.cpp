@@ -116,6 +116,17 @@ void
 MavlinkReceiver::handle_message(mavlink_message_t *msg)
 {
 	switch (msg->msgid) {
+	case MAVLINK_MSG_ID_KRISO_CA_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_CK_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_CONTROL_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_DP_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_EMERGENCY_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_ROS_LOG_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_STATUS:
+	case MAVLINK_MSG_ID_KRISO_VOL_STATUS:
+		handle_message_kriso(msg);
+		break;
+
 	case MAVLINK_MSG_ID_COMMAND_LONG:
 		handle_message_command_long(msg);
 		break;
@@ -379,6 +390,53 @@ MavlinkReceiver::evaluate_target_ok(int command, int target_system, int target_c
 	}
 
 	return target_ok;
+}
+
+void
+MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
+{
+	switch(msg->msgid) {
+		case MAVLINK_MSG_ID_KRISO_CA_COMMAND:
+			mavlink_kriso_ca_command_t ca_mavlink;
+			mavlink_msg_kriso_ca_command_decode(msg, &ca_mavlink);
+			PX4_ERR("KRISO_CA_COMMAND: %f, %f", (double)ca_mavlink.ca_alert_range, (double)ca_mavlink.ca_avoid_range);
+			break;
+		case MAVLINK_MSG_ID_KRISO_CK_COMMAND:
+			mavlink_kriso_ck_command_t ck_mavlink;
+			mavlink_msg_kriso_ck_command_decode(msg, &ck_mavlink);
+			PX4_ERR("KRISO_CK_COMMAND: %f, %f, %f", (double)ck_mavlink.hdg_cmd, (double)ck_mavlink.nav_surge_dgain, (double)ck_mavlink.nav_yaw_dgain);
+			break;
+		case MAVLINK_MSG_ID_KRISO_CONTROL_COMMAND:
+			mavlink_kriso_control_command_t control_mavlink;
+			mavlink_msg_kriso_control_command_decode(msg, &control_mavlink);
+			PX4_ERR("KRISO_CONTROL_COMMAND: %d, %d, %d", control_mavlink.op_mode, control_mavlink.ca_method, control_mavlink.ca_mode);
+			break;
+		case MAVLINK_MSG_ID_KRISO_DP_COMMAND:
+			mavlink_kriso_dp_command_t dp_mavlink;
+			mavlink_msg_kriso_dp_command_decode(msg, &dp_mavlink);
+			PX4_ERR("KRISO_DP_COMMAND: %f, %f, %f, %f", (double)dp_mavlink.target_wp_lat, (double)dp_mavlink.target_wp_lon, (double)dp_mavlink.dp_surge_dgain, (double)dp_mavlink.dp_sway_dgain);
+			break;
+		case MAVLINK_MSG_ID_KRISO_EMERGENCY_COMMAND:
+			mavlink_kriso_emergency_command_t eg_mavlink;
+			mavlink_msg_kriso_emergency_command_decode(msg, &eg_mavlink);
+			PX4_ERR("KRISO_EMERGENCY_COMMAND: %d", eg_mavlink.emergency_mode);
+			break;
+		case MAVLINK_MSG_ID_KRISO_ROS_LOG_COMMAND:
+			mavlink_kriso_ros_log_command_t rl_mavlink;
+			mavlink_msg_kriso_ros_log_command_decode(msg, &rl_mavlink);
+			PX4_ERR("KRISO_ROS_LOG_COMMAND: %d",rl_mavlink.ros_log_command);
+			break;
+		case MAVLINK_MSG_ID_KRISO_STATUS:
+			mavlink_kriso_status_t ks_mavlink;
+			mavlink_msg_kriso_status_decode(msg, &ks_mavlink);
+			// PX4_ERR("KRISO_STATUS: %f",ks_mavlink.);
+			break;
+		case MAVLINK_MSG_ID_KRISO_VOL_STATUS:
+			mavlink_kriso_vol_status_t vs_mavlink;
+			mavlink_msg_kriso_vol_status_decode(msg, &vs_mavlink);
+			// PX4_ERR("KRISO_VOL_STATUS: %f",);
+			break;
+	}
 }
 
 void
