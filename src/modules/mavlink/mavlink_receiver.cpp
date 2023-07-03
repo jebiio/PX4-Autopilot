@@ -409,7 +409,7 @@ MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
 		case MAVLINK_MSG_ID_KRISO_CONTROL_COMMAND:
 			mavlink_kriso_control_command_t control_mavlink;
 			mavlink_msg_kriso_control_command_decode(msg, &control_mavlink);
-			PX4_ERR("KRISO_CONTROL_COMMAND: %d, %d, %d", control_mavlink.op_mode, control_mavlink.ca_method, control_mavlink.ca_mode);
+			PX4_ERR("KRISO_CONTROL_COMMAND: %d, %d, %d", (int)control_mavlink.op_mode, (int)control_mavlink.ca_method, (int)control_mavlink.ca_mode);
 			break;
 		case MAVLINK_MSG_ID_KRISO_DP_COMMAND:
 			mavlink_kriso_dp_command_t dp_mavlink;
