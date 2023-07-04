@@ -51,20 +51,34 @@ int KrisoTest::print_status()
 
 int KrisoTest::custom_command(int argc, char *argv[])
 {
-	/*
 	if (!is_running()) {
 		print_usage("not running");
 		return 1;
 	}
 
 	// additional custom commands can be handled like this:
-	if (!strcmp(argv[0], "do-something")) {
-		get_instance()->do_something();
+	if (!strcmp(argv[0], "1")) {
+		get_instance()->sendStatus();
 		return 0;
 	}
-	 */
 
-	return print_usage("unknown command");
+	return 0;
+}
+/*
+uORB::Publication<kriso_catovcc_s> _kriso_catovcc_topic{ORB_ID(kriso_catovcc)};
+	uORB::Publication<kriso_cktovcc_s> _kriso_cktovcc_topic{ORB_ID(kriso_cktovcc)};
+	uORB::Publication<kriso_controlcmdtovcc_s> _kriso_controlcmdtovcc_topic{ORB_ID(kriso_controlcmdtovcc)};
+	uORB::Publication<kriso_dptovcc_s> _kriso_dptovcc_topic{ORB_ID(kriso_dptovcc)};
+	uORB::Publication<kriso_status_s> _kriso_status_topic{ORB_ID(kriso_status)};
+	uORB::Publication<kriso_wttovcc_s> _kriso_wttovcc_topic{ORB_ID(kriso_wttovcc)};
+*/
+
+void KrisoTest::sendStatus()
+{
+	kriso_status_s status{};
+	status.timestamp = hrt_absolute_time();
+	_kriso_status_topic.publish(status);
+	PX4_ERR("send Status!");
 }
 
 

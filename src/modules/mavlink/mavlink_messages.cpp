@@ -117,6 +117,8 @@
 #include "streams/VFR_HUD.hpp"
 #include "streams/VIBRATION.hpp"
 #include "streams/WIND_COV.hpp"
+#include "streams/KRISO_STATUS.hpp"
+
 /*
 #include "streams/KRISO_CATOVCC.hpp"
 #include "streams/KRISO_CKTOVCC.hpp"

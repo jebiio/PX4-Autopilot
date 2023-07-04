@@ -76,6 +76,8 @@ public:
 	/** @see ModuleBase::print_status() */
 	int print_status() override;
 
+	void sendStatus();
+
 private:
 
 	/**
