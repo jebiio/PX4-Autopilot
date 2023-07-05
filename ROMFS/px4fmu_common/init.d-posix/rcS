@@ -274,5 +274,7 @@ else
 fi
 . ${R}etc/init.d/rc.logging
 
+kriso_test start
+
 mavlink boot_complete
 replay trystart

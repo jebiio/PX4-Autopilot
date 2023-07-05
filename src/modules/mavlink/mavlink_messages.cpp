@@ -118,6 +118,7 @@
 #include "streams/VIBRATION.hpp"
 #include "streams/WIND_COV.hpp"
 #include "streams/KRISO_STATUS.hpp"
+#include "streams/KRISO_VOLTAGE.hpp"
 
 /*
 #include "streams/KRISO_CATOVCC.hpp"
@@ -569,8 +570,17 @@ static const StreamListItem streams_list[] = {
 	create_stream_list_item<MavlinkStreamEfiStatus>(),
 #endif // EFI_STATUS_HPP
 #if defined(GPS_RTCM_DATA_HPP)
-	create_stream_list_item<MavlinkStreamGPSRTCMData>()
+	create_stream_list_item<MavlinkStreamGPSRTCMData>(),
 #endif // GPS_RTCM_DATA_HPP
+
+#if defined(KRISO_STATUS_HPP)
+	create_stream_list_item<MavlinkStreamKrisoStatus>(),
+#endif // KRISO_STATUS_HPP
+
+#if defined(KRISO_VOLTAGE_HPP)
+	create_stream_list_item<MavlinkStreamKrisoVoltage>()
+#endif //KRISO_VOLTAGE_HPP
+
 };
 
 const char *get_stream_name(const uint16_t msg_id)

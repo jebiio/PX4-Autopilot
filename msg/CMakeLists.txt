@@ -103,6 +103,7 @@ set(msg_files
 	kriso_controlcmdtovcc.msg
 	kriso_dptovcc.msg
 	kriso_status.msg
+	kriso_voltage.msg
 	kriso_wttovcc.msg
 	landing_gear.msg
 	landing_target_innovations.msg

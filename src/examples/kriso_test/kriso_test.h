@@ -45,6 +45,7 @@
 #include <uORB/topics/kriso_dptovcc.h>
 #include <uORB/topics/kriso_status.h>
 #include <uORB/topics/kriso_wttovcc.h>
+#include <uORB/topics/kriso_voltage.h>
 
 using namespace time_literals;
 
@@ -77,6 +78,7 @@ public:
 	int print_status() override;
 
 	void sendStatus();
+	void sendVoltage();
 
 private:
 
@@ -105,6 +107,6 @@ private:
 	uORB::Publication<kriso_dptovcc_s> _kriso_dptovcc_topic{ORB_ID(kriso_dptovcc)};
 	uORB::Publication<kriso_status_s> _kriso_status_topic{ORB_ID(kriso_status)};
 	uORB::Publication<kriso_wttovcc_s> _kriso_wttovcc_topic{ORB_ID(kriso_wttovcc)};
-
+	uORB::Publication<kriso_voltage_s> _kriso_voltage_topic{ORB_ID(kriso_voltage)};
 };
 

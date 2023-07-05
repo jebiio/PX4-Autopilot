@@ -8,7 +8,7 @@ class MavlinkStreamKrisoStatus : public MavlinkStream
 public:
 	static MavlinkStream *new_instance(Mavlink *mavlink) { return new MavlinkStreamKrisoStatus(mavlink); }
 
-	static constexpr const char *get_name_static() { return "STATUS"; }
+	static constexpr const char *get_name_static() { return "KRISO_STATUS"; }
 	static constexpr uint16_t get_id_static() { return MAVLINK_MSG_ID_KRISO_STATUS; }
 
 	const char *get_name() const override { return get_name_static(); }
@@ -27,10 +27,13 @@ private:
 	bool send() override
 	{
 		kriso_status_s status{};
-		PX4_ERR("mavlink kriso status sent!!!");
-
-		if (status_sub.copy(&status)) {
+		if (status_sub.update(&status)) {
 			mavlink_kriso_status_t msg{};
+			msg.nav_latitude = 23.56789;
+			msg.nav_longitude = 162.123456;
+			msg.nav_mode = 2;
+			msg.t1_rpm = 1;
+			msg.nav_yaw = 1.0;
 			mavlink_msg_kriso_status_send_struct(_mavlink->get_channel(), &msg);
 			PX4_ERR("mavlink kriso status sent!!!");
 			return true;

@@ -593,6 +593,7 @@ unset STARTUP_TUNE
 unset USE_IO
 unset VEHICLE_TYPE
 
+kriso_test start
 #
 # Boot is complete, inform MAVLink app(s) that the system is now fully up and running.
 #

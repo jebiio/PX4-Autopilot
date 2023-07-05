@@ -61,6 +61,10 @@ int KrisoTest::custom_command(int argc, char *argv[])
 		get_instance()->sendStatus();
 		return 0;
 	}
+	else if(!strcmp(argv[0], "2")) {
+		get_instance()->sendVoltage();
+		return 0;
+	}
 
 	return 0;
 }
@@ -78,9 +82,16 @@ void KrisoTest::sendStatus()
 	kriso_status_s status{};
 	status.timestamp = hrt_absolute_time();
 	_kriso_status_topic.publish(status);
-	PX4_ERR("send Status!");
+	PX4_ERR("send Kriso Status!");
 }
 
+void KrisoTest::sendVoltage()
+{
+	kriso_voltage_s status{};
+	status.timestamp = hrt_absolute_time();
+	_kriso_voltage_topic.publish(status);
+	PX4_ERR("send voltage status!");
+}
 
 int KrisoTest::task_spawn(int argc, char *argv[])
 {
