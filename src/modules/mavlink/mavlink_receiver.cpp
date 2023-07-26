@@ -439,12 +439,12 @@ MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
 		case MAVLINK_MSG_ID_KRISO_WT_COMMAND:
 			mavlink_kriso_wt_command_t wt_mavlink;
 			mavlink_msg_kriso_wt_command_decode(msg, &wt_mavlink);
-			PX4_ERR("KRISO_WT_COMMAND: %f, %f, %f, %f ", (double)wt_mavlink.lat, (double)wt_mavlink.lon, (double)wt_mavlink.spd_cmd, (double)wt_mavlink.acceptance_radius);
-			// PX4_ERR("KRISO_WT_COMMAND: surge_pgain : %f, surge_dgain : %f, nav_yaw_pgain : %f, nav_yaw_dgain: %f", (double)wt_mavlink.nav_surge_pgain , (double)wt_mavlink.nav_surge_dgain, (double)wt_mavlink.nav_yaw_pgain, (double)wt_mavlink.nav_yaw_dgain);
-			// PX4_ERR("KRISO_WT_COMMAND: lat[0] : %f, lat[1] : %f, lat[2] : %f, lat[3]: %f, lat[4]: %f", (double)wt_mavlink.lat[0], (double)wt_mavlink.lat[1], (double)wt_mavlink.lat[2], (double)wt_mavlink.lat[3], (double)wt_mavlink.lat[4]);
-			// PX4_ERR("KRISO_WT_COMMAND: lon[0] : %f, lon[1] : %f, lon[2] : %f, lon[3]: %f, lon[4]: %f", (double)wt_mavlink.lon[0], (double)wt_mavlink.lon[1], (double)wt_mavlink.lon[2], (double)wt_mavlink.lon[3], (double)wt_mavlink.lon[4]);
-			// PX4_ERR("KRISO_WT_COMMAND: spd_cmd[0] : %f, spd_cmd[1] : %f, spd_cmd[2] : %f, spd_cmd[3]: %f, spd_cmd[4]: %f", (double)wt_mavlink.spd_cmd[0], (double)wt_mavlink.spd_cmd[1], (double)wt_mavlink.spd_cmd[2], (double)wt_mavlink.spd_cmd[3], (double)wt_mavlink.spd_cmd[4]);
-			// PX4_ERR("KRISO_WT_COMMAND: acceptance_radius[0] : %f, acceptance_radius[1] : %f, acceptance_radius[2] : %f, acceptance_radius[3]: %f, acceptance_radius[4]: %f", (double)wt_mavlink.acceptance_radius[0], (double)wt_mavlink.acceptance_radius[1], (double)wt_mavlink.acceptance_radius[2], (double)wt_mavlink.acceptance_radius[3], (double)wt_mavlink.acceptance_radius[4]);
+			// PX4_ERR("KRISO_WT_COMMAND: %f, %f, %f, %f ", (double)wt_mavlink.lat, (double)wt_mavlink.lon, (double)wt_mavlink.spd_cmd, (double)wt_mavlink.acceptance_radius);
+			PX4_ERR("KRISO_WT_COMMAND: surge_pgain : %f, surge_dgain : %f, nav_yaw_pgain : %f, nav_yaw_dgain: %f", (double)wt_mavlink.nav_surge_pgain , (double)wt_mavlink.nav_surge_dgain, (double)wt_mavlink.nav_yaw_pgain, (double)wt_mavlink.nav_yaw_dgain);
+			PX4_ERR("KRISO_WT_COMMAND: lat[0] : %f, lat[1] : %f, lat[2] : %f, lat[3]: %f, lat[4]: %f", (double)wt_mavlink.lat[0], (double)wt_mavlink.lat[1], (double)wt_mavlink.lat[2], (double)wt_mavlink.lat[3], (double)wt_mavlink.lat[4]);
+			PX4_ERR("KRISO_WT_COMMAND: lon[0] : %f, lon[1] : %f, lon[2] : %f, lon[3]: %f, lon[4]: %f", (double)wt_mavlink.lon[0], (double)wt_mavlink.lon[1], (double)wt_mavlink.lon[2], (double)wt_mavlink.lon[3], (double)wt_mavlink.lon[4]);
+			PX4_ERR("KRISO_WT_COMMAND: spd_cmd[0] : %f, spd_cmd[1] : %f, spd_cmd[2] : %f, spd_cmd[3]: %f, spd_cmd[4]: %f", (double)wt_mavlink.spd_cmd[0], (double)wt_mavlink.spd_cmd[1], (double)wt_mavlink.spd_cmd[2], (double)wt_mavlink.spd_cmd[3], (double)wt_mavlink.spd_cmd[4]);
+			PX4_ERR("KRISO_WT_COMMAND: acceptance_radius[0] : %f, acceptance_radius[1] : %f, acceptance_radius[2] : %f, acceptance_radius[3]: %f, acceptance_radius[4]: %f", (double)wt_mavlink.acceptance_radius[0], (double)wt_mavlink.acceptance_radius[1], (double)wt_mavlink.acceptance_radius[2], (double)wt_mavlink.acceptance_radius[3], (double)wt_mavlink.acceptance_radius[4]);
 			break;
 	}
 }
