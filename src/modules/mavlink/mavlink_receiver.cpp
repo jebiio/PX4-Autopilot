@@ -124,6 +124,7 @@ MavlinkReceiver::handle_message(mavlink_message_t *msg)
 	case MAVLINK_MSG_ID_KRISO_ROS_LOG_COMMAND:
 	case MAVLINK_MSG_ID_KRISO_STATUS:
 	case MAVLINK_MSG_ID_KRISO_VOL_STATUS:
+	case MAVLINK_MSG_ID_KRISO_WT_COMMAND:
 		handle_message_kriso(msg);
 		break;
 
