@@ -32,8 +32,9 @@ private:
 			msg.nav_latitude = 23.56789;
 			msg.nav_longitude = 162.123456;
 			msg.nav_mode = 2;
-			msg.t1_rpm = 1;
 			msg.nav_yaw = 1.0;
+			msg.nav_yaw_rate = 1.8;
+			msg.wea_visibiran = 2.2;
 			mavlink_msg_kriso_status_send_struct(_mavlink->get_channel(), &msg);
 			PX4_ERR("mavlink kriso status sent!!!");
 			return true;
