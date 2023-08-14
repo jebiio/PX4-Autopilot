@@ -10,21 +10,21 @@ class MavlinkStreamKrisoControlCmdToVcc : public MavlinkStream
 public:
 	static MavlinkStream *new_instance(Mavlink *mavlink) { return new MavlinkStreamKrisoControlCmdToVcc(mavlink); }
 
-	static constexpr const char *get_name_static() { return "CKTOVCC"; }
-	static constexpr uint16_t get_id_static() { return MAVLINK_MSG_ID_HOME_POSITION; }
+	static constexpr const char *get_name_static() { return "KRISO_CONTROLCMDTOVCC"; }
+	static constexpr uint16_t get_id_static() { return MAVLINK_MSG_ID_KRISO_CONTROL_COMMAND_TO_VCC; }
 
 	const char *get_name() const override { return get_name_static(); }
 	uint16_t get_id() override { return get_id_static(); }
 
 	unsigned get_size() override
 	{
-		return _home_sub.advertised() ? (MAVLINK_MSG_ID_HOME_POSITION_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES) : 0;
+		return status_sub.advertised() ? (MAVLINK_MSG_ID_KRISO_CONTROL_COMMAND_TO_VCC_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES) : 0;
 	}
 
 private:
 	explicit MavlinkStreamKrisoControlCmdToVcc(Mavlink *mavlink) : MavlinkStream(mavlink) {}
 
-	uORB::Subscription _home_sub{ORB_ID(kriso_catovcc)};
+	uORB::Subscription status_sub{ORB_ID(kriso_controlcmdtovcc)};
 
 	bool send() override
 	{
@@ -32,28 +32,19 @@ private:
 		// the GCS does pick it up at one point
 		kriso_controlcmdtovcc_s home;
 
-		if (kriso_cktovcc.advertised() && kriso_cktovcc.copy(&home)) {
-			if (home.valid_hpos) {
-				mavlink_home_position_t msg{};
-
-				msg.latitude  = home.lat * 1e7;
-				msg.longitude = home.lon * 1e7;
-				msg.altitude  = home.alt * 1e3f;
-
-				msg.x = home.x;
-				msg.y = home.y;
-				msg.z = home.z;
-
-				msg.approach_x = 0.f;
-				msg.approach_y = 0.f;
-				msg.approach_z = 0.f;
-
-				msg.time_usec = home.timestamp;
-
-				mavlink_msg_home_position_send_struct(_mavlink->get_channel(), &msg);
-
-				return true;
-			}
+		if (status_sub.update(&home)) {
+			mavlink_kriso_control_command_to_vcc_t msg{};
+			msg.t1_rpm = home.t1_rpm;
+			msg.t2_rpm = home.t2_rpm;
+			msg.t3_rpm = home.t3_rpm;
+			msg.t3_angle = home.t3_angle;
+			msg.t4_rpm = home.t4_rpm;
+			msg.t4_angle = home.t4_angle;
+			msg.oper_mode = home.oper_mode;
+			msg.mission_mode = home.mission_mode;
+			mavlink_msg_kriso_control_command_to_vcc_send_struct(_mavlink->get_channel(), &msg);
+			PX4_ERR("mavlink  control cmd to vcc sent!!!");
+			return true;
 		}
 
 		return false;

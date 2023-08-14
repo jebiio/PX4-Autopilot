@@ -120,6 +120,9 @@
 #include "streams/KRISO_STATUS.hpp"
 #include "streams/KRISO_VOLTAGE.hpp"
 
+#include "streams/KRISO_CONTROLCMDTOVCC.hpp"
+#include "streams/KRISO_LOGGINGSTATUS.hpp"
+
 /*
 #include "streams/KRISO_CATOVCC.hpp"
 #include "streams/KRISO_CKTOVCC.hpp"
@@ -578,8 +581,16 @@ static const StreamListItem streams_list[] = {
 #endif // KRISO_STATUS_HPP
 
 #if defined(KRISO_VOLTAGE_HPP)
-	create_stream_list_item<MavlinkStreamKrisoVoltage>()
+	create_stream_list_item<MavlinkStreamKrisoVoltage>(),
 #endif //KRISO_VOLTAGE_HPP
+
+#if defined(KRISO_CONTROLCMDTOVCC_HPP)
+	create_stream_list_item<MavlinkStreamKrisoControlCmdToVcc>(),
+#endif //KRISO_CONTROLCMDTOVCC_HPP
+
+#if defined(KRISO_LOGGINGSTATUS_HPP)
+	create_stream_list_item<MavlinkStreamKrisoLoggingStatus>()
+#endif //KRISO_LOGGINGSTATUS_HPP
 
 };
 

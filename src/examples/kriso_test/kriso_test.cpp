@@ -64,6 +64,12 @@ int KrisoTest::custom_command(int argc, char *argv[])
 	else if(!strcmp(argv[0], "2")) {
 		get_instance()->sendVoltage();
 		return 0;
+	} else if(!strcmp(argv[0], "3")) {
+		get_instance()->sendControlCmdVcc();
+		return 0;
+	}else if(!strcmp(argv[0], "4")) {
+		get_instance()->sendLoggingStatus();
+		return 0;
 	}
 
 	return 0;
@@ -92,6 +98,33 @@ void KrisoTest::sendVoltage()
 	_kriso_voltage_topic.publish(status);
 	PX4_ERR("send voltage status!");
 }
+
+void KrisoTest::sendControlCmdVcc()
+{
+	kriso_controlcmdtovcc_s status{};
+	status.timestamp = hrt_absolute_time();
+
+	status.t1_rpm = 1.1;
+	status.t2_rpm = 1.2;
+	status.t3_rpm = 1.3;
+	status.t3_angle = 1.4;
+	status.t4_rpm = 1.5;
+	status.t4_angle = 1.6;
+	status.oper_mode = 1;
+	status.mission_mode = 2;
+	_kriso_controlcmdtovcc_topic.publish(status);
+	PX4_ERR("send ControlCmdToVcc status!");
+}
+
+void KrisoTest::sendLoggingStatus()
+{
+	kriso_loggingstatus_s status{};
+	status.timestamp = hrt_absolute_time();
+	status.logging_status = 1;
+	_kriso_loggingstatus_topic.publish(status);
+	PX4_ERR("send logging status!");
+}
+
 
 int KrisoTest::task_spawn(int argc, char *argv[])
 {
@@ -212,12 +245,6 @@ void KrisoTest::parameters_update(bool force)
 		updateParams();
 	}
 }
-	uORB::Publication<kriso_catovcc_s> _kriso_catovcc_topic{ORB_ID(kriso_catovcc)};
-	uORB::Publication<kriso_cktovcc_s> _kriso_cktovcc_topic{ORB_ID(kriso_cktovcc)};
-	uORB::Publication<kriso_controlcmdtovcc_s> _kriso_controlcmdtovcc_topic{ORB_ID(kriso_controlcmdtovcc)};
-	uORB::Publication<kriso_dptovcc_s> _kriso_dptovcc_topic{ORB_ID(kriso_dptovcc)};
-	uORB::Publication<kriso_status_s> _kriso_status_topic{ORB_ID(kriso_status)};
-	uORB::Publication<kriso_wttovcc_s> _kriso_wttovcc_topic{ORB_ID(kriso_wttovcc)};
 
 void KrisoTest::publishMsg(uint8_t type)
 {
