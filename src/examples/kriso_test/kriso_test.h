@@ -46,7 +46,6 @@
 #include <uORB/topics/kriso_status.h>
 #include <uORB/topics/kriso_wttovcc.h>
 #include <uORB/topics/kriso_voltage.h>
-#include <uORB/topics/kriso_controlcmdvcc.h>
 #include <uORB/topics/kriso_loggingstatus.h>
 
 using namespace time_literals;
