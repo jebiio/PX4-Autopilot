@@ -106,6 +106,7 @@ set(msg_files
 	kriso_voltage.msg
 	kriso_wttovcc.msg
 	kriso_loggingstatus.msg
+	kriso_aisstatus.msg
 	landing_gear.msg
 	landing_target_innovations.msg
 	landing_target_pose.msg

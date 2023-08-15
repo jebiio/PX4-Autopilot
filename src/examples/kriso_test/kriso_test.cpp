@@ -70,6 +70,9 @@ int KrisoTest::custom_command(int argc, char *argv[])
 	}else if(!strcmp(argv[0], "4")) {
 		get_instance()->sendLoggingStatus();
 		return 0;
+	}else if(!strcmp(argv[0], "5")) {
+		get_instance()->sendAisStatus();
+		return 0;
 	}
 
 	return 0;
@@ -125,7 +128,35 @@ void KrisoTest::sendLoggingStatus()
 	PX4_ERR("send logging status!");
 }
 
+void KrisoTest::sendAisStatus()
+{
+	kriso_aisstatus_s status{};
 
+	status.msg_type  = 2;
+	status.repeat = 3;
+	status.mmsi  = 4;
+	status.reserved_1  = 5;
+	status.speed       = 2.1;
+	status.accuracy      = 2;
+	status.lon         = 3.1;
+	status.lat         = 3.2;
+	status.course      = 3.3;
+	status.heading    = 10;
+	status.second        = 11;
+	status.reserved_2    = 12;
+	status.cs             = 1;
+	status. display        = 2;
+	status.dsc            = 3;
+	status. band           = 4;
+	status.msg22          = 5;
+	status.assigned       = 6;
+	status.raim           = 7;
+	status.radio         = 8;
+
+	_kriso_aisstatus_topic.publish(status);
+	PX4_ERR("send ais status!");
+
+}
 int KrisoTest::task_spawn(int argc, char *argv[])
 {
 	_task_id = px4_task_spawn_cmd("module",
