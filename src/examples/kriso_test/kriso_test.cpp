@@ -90,8 +90,12 @@ void KrisoTest::sendStatus()
 {
 	kriso_status_s status{};
 	status.timestamp = hrt_absolute_time();
+	status.nav_longitude = lon;
+	status.nav_latitude = lat;
 	_kriso_status_topic.publish(status);
 	PX4_ERR("send Kriso Status!");
+	lat = lat + 0.02;
+	lon = lon + 0.03;
 }
 
 void KrisoTest::sendVoltage()

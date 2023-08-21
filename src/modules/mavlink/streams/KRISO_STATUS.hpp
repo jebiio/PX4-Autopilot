@@ -29,12 +29,13 @@ private:
 		kriso_status_s status{};
 		if (status_sub.update(&status)) {
 			mavlink_kriso_status_t msg{};
-			msg.nav_latitude = 23.56789;
-			msg.nav_longitude = 162.123456;
+			msg.nav_latitude = status.nav_latitude;
+			msg.nav_longitude = status.nav_longitude;
 			msg.nav_mode = 2;
 			msg.nav_yaw = 1.0;
 			msg.nav_yaw_rate = 1.8;
 			msg.wea_visibiran = 2.2;
+			PX4_ERR("lat: %lf, lon: %lf", status.nav_latitude, status.nav_longitude);
 			mavlink_msg_kriso_status_send_struct(_mavlink->get_channel(), &msg);
 			PX4_ERR("mavlink kriso status sent!!!");
 			return true;
