@@ -125,6 +125,7 @@ MavlinkReceiver::handle_message(mavlink_message_t *msg)
 	case MAVLINK_MSG_ID_KRISO_STATUS:
 	case MAVLINK_MSG_ID_KRISO_VOL_STATUS:
 	case MAVLINK_MSG_ID_KRISO_WT_COMMAND:
+	case MAVLINK_MSG_ID_KRISO_MT_COMMAND:
 		handle_message_kriso(msg);
 		break;
 
@@ -446,6 +447,17 @@ MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
 			PX4_ERR("KRISO_WT_COMMAND: lon[0] : %f, lon[1] : %f, lon[2] : %f, lon[3]: %f, lon[4]: %f", (double)wt_mavlink.lon[0], (double)wt_mavlink.lon[1], (double)wt_mavlink.lon[2], (double)wt_mavlink.lon[3], (double)wt_mavlink.lon[4]);
 			PX4_ERR("KRISO_WT_COMMAND: spd_cmd[0] : %f, spd_cmd[1] : %f, spd_cmd[2] : %f, spd_cmd[3]: %f, spd_cmd[4]: %f", (double)wt_mavlink.spd_cmd[0], (double)wt_mavlink.spd_cmd[1], (double)wt_mavlink.spd_cmd[2], (double)wt_mavlink.spd_cmd[3], (double)wt_mavlink.spd_cmd[4]);
 			PX4_ERR("KRISO_WT_COMMAND: acceptance_radius[0] : %f, acceptance_radius[1] : %f, acceptance_radius[2] : %f, acceptance_radius[3]: %f, acceptance_radius[4]: %f", (double)wt_mavlink.acceptance_radius[0], (double)wt_mavlink.acceptance_radius[1], (double)wt_mavlink.acceptance_radius[2], (double)wt_mavlink.acceptance_radius[3], (double)wt_mavlink.acceptance_radius[4]);
+			break;
+		case MAVLINK_MSG_ID_KRISO_MT_COMMAND:
+			mavlink_kriso_mt_command_t mt_mavlink;
+			mavlink_msg_kriso_mt_command_decode(msg, &mt_mavlink);
+			PX4_ERR("KRISO_MT_COMMAND: start : %d", (int)mt_mavlink.start);
+			PX4_ERR("KRISO_MT_COMMAND: t1_rpm : %f", (double)mt_mavlink.t1_rpm);
+			PX4_ERR("KRISO_MT_COMMAND: t2_rpm : %f", (double)mt_mavlink.t2_rpm);
+			PX4_ERR("KRISO_MT_COMMAND: t3_rpm : %f", (double)mt_mavlink.t3_rpm);
+			PX4_ERR("KRISO_MT_COMMAND: t3_angle : %f", (double)mt_mavlink.t3_angle);
+			PX4_ERR("KRISO_MT_COMMAND: t4_rpm : %f", (double)mt_mavlink.t4_rpm);
+			PX4_ERR("KRISO_MT_COMMAND: t4_angle : %f", (double)mt_mavlink.t4_angle);
 			break;
 	}
 }
