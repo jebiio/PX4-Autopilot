@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+    <model name="realsense_d435">
+        <link name="rs_link">
+            <inertial>
+                <mass>0.0615752</mass>
+                <inertia>
+                    <ixx>9.108e-05</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>2.51e-06</iyy>
+                    <iyz>0</iyz>
+                    <izz>8.931e-05</izz>
+                </inertia>
+                <pose frame=''>0 0 0 0 -0 0</pose>
+            </inertial>
+            <!-- <collision name="rs_collision">
+                <geometry>
+                    <mesh>
+                        <uri>model://realsense_d435/meshes/realsense.dae</uri>
+                    </mesh>
+                </geometry>
+            </collision> -->
+            <visual name= "rs_visual">
+                <pose>0 0 0 0 0 1.5708</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://realsense_d435/meshes/realsense.dae</uri>
+                        <submesh>
+                            <name>RealSense</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>model://realsense_d435/materials/textures/RealSense_Albedo.png</albedo_map>
+                            <normal_map>model://realsense_d435/materials/textures/RealSense_Normal.png</normal_map>
+                            <metalness_map>model://realsense_d435/materials/textures/RealSense_Metalness.png</metalness_map>
+                            <roughness_map>model://realsense_d435/materials/textures/RealSense_Roughness.png</roughness_map>
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>model://realsense_d435/materials/scripts/</uri>
+                        <uri>model://realsense_d435/materials/textures/</uri>
+                        <name>UrbanTile/RealSense_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+
+            <sensor name="color" type="camera">
+                <pose>0 -0.046 0.004 0 0 0</pose>
+                <camera name="__default__">
+                    <horizontal_fov>1.047</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>RGB_INT8</format>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>100</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>10</update_rate>
+                <visualize>1</visualize>
+            </sensor>
+            <sensor name="ired1" type="camera">
+                <pose>0 -0.06 0.004 0 0 0</pose>
+                <camera name="__default__">
+                    <horizontal_fov>1.047</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>L_INT8</format>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>100</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>10</update_rate>
+                <visualize>0</visualize>
+            </sensor>
+            <sensor name="ired2" type="camera">
+                <pose>0 0.01 0.004 0 0 0</pose>
+                <camera name="__default__">
+                    <horizontal_fov>1.047</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>L_INT8</format>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>100</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>10</update_rate>
+                <visualize>0</visualize>
+            </sensor>
+            <sensor name="depth" type="depth">
+                <pose>0 -0.03 0.004 0 0 0</pose>
+                <camera name="__default__">
+                    <horizontal_fov>1.047</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>100</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>10</update_rate>
+                <visualize>0</visualize>
+            </sensor>
+
+        </link>
+    </model>
+</sdf>

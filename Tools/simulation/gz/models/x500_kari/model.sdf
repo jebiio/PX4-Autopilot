@@ -5,13 +5,13 @@
       <uri>x500</uri>
     </include>
     <include merge='true'>
-      <uri>https://fuel.gazebosim.org/1.0/RudisLaboratories/models/OakD-Lite</uri>
-      <pose>.12 .03 .242 0 0 0</pose>
+      <uri>realsense_d435</uri>
+      <pose>.15 0 .21 0 0 0</pose>
     </include>
-    <joint name="CameraJoint" type="fixed">
+    <joint name="rs_joint" type="fixed">
       <parent>base_link</parent>
-      <child>OakD-Lite/base_link</child>
-      <pose relative_to="base_link">.12 .03 .242 0 0 0</pose>
+      <child>rs_link</child>
+      <pose relative_to="base_link">.15 0 .21 0 0 0</pose>
     </joint>
 
     <!--forward-facing lidar-->
