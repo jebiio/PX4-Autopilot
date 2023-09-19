@@ -176,6 +176,10 @@
       <child>fpv_cam</child>
     </joint>
 
-
+    <plugin name='gz::sim::systems::OdometryPublisher' filename='gz-sim-odometry-publisher-system'>
+      <odom_topic>/gz_odom/</odom_topic>
+      <odom_covariance_topic>/gz_odom_covariance/</odom_covariance_topic>
+      <tf_topic>/gz_tf/</tf_topic>
+    </plugin>
   </model>
 </sdf>
