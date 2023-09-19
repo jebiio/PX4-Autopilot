@@ -180,6 +180,7 @@
       <odom_topic>/gz_odom/</odom_topic>
       <odom_covariance_topic>/gz_odom_covariance/</odom_covariance_topic>
       <tf_topic>/gz_tf/</tf_topic>
+      <dimensions>3</dimensions>
     </plugin>
   </model>
 </sdf>
