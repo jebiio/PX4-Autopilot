@@ -70,7 +70,7 @@
       <child>lidar_link0</child>
     </joint>
 
-     <!--downward-facing lidar-->
+    <!--downward-facing lidar-->
     <link name='lidar_link1'>
       <inertial>
         <inertia>
@@ -125,7 +125,6 @@
       <parent>base_link</parent>
       <child>lidar_link1</child>
     </joint>
-
     <link name='fpv_cam'>
       <inertial>
         <inertia>
@@ -170,17 +169,72 @@
         <visualize>true</visualize>
       </sensor>
     </link>
-
     <joint name="fpv_cam_joint1" type="fixed">
       <parent>base_link</parent>
       <child>fpv_cam</child>
     </joint>
-
     <plugin name='gz::sim::systems::OdometryPublisher' filename='gz-sim-odometry-publisher-system'>
       <odom_topic>/gz_odom/</odom_topic>
       <odom_covariance_topic>/gz_odom_covariance/</odom_covariance_topic>
       <tf_topic>/gz_tf/</tf_topic>
       <dimensions>3</dimensions>
     </plugin>
+    <plugin name='gz::sim::systems::Magnetometer' filename='gz-sim-magnetometer-system'/>
+    <link name='mag_link'>
+      <inertial>
+        <inertia>
+          <ixx>0.00000016666</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00000016666</iyy>
+          <iyz>0</iyz>
+          <izz>0.00000016666</izz>
+        </inertia>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <visual name='mag_visual'>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.300000012 0.300000012 0.300000012 1</ambient>
+          <diffuse>0.699999988 0.699999988 0.699999988 1</diffuse>
+          <specular>1 1 1 1</specular>
+        </material>
+      </visual>
+      <pose>0 0 0.3 0 0 0</pose>
+      <enable_wind>false</enable_wind>
+      <sensor name="magnetometer" type="magnetometer">
+        <always_on>1</always_on>
+        <update_rate>20</update_rate>
+        <magnetometer>
+          <x>
+            <noise type="gaussian">
+              <mean>0.000000080</mean>
+              <bias_mean>0.000000400</bias_mean>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.000000080</mean>
+              <bias_mean>0.000000400</bias_mean>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.000000080</mean>
+              <bias_mean>0.000000400</bias_mean>
+            </noise>
+          </z>
+        </magnetometer>
+      </sensor>
+    </link>
+    <joint name="mag_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>mag_link</child>
+    </joint>
   </model>
 </sdf>
