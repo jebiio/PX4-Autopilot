@@ -125,6 +125,7 @@
       <parent>base_link</parent>
       <child>lidar_link1</child>
     </joint>
+    <!--fpv cam-->
     <link name='fpv_cam'>
       <inertial>
         <inertia>
@@ -173,6 +174,78 @@
       <parent>base_link</parent>
       <child>fpv_cam</child>
     </joint>
+    <!--gps-->
+    <link name='gps'>
+      <inertial>
+        <inertia>
+          <ixx>0.00000016666</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00000016666</iyy>
+          <iyz>0</iyz>
+          <izz>0.00000016666</izz>
+        </inertia>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <!-- <visual name='gps_visual'>
+        <geometry>
+          <box>
+            <size>1.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.300000012 0.300000012 0.300000012 1</ambient>
+          <diffuse>0.699999988 0.699999988 0.699999988 1</diffuse>
+          <specular>1 1 1 1</specular>
+        </material>
+      </visual> -->
+      <pose>0 0 0.19 0 1.57079633 0</pose>
+      <enable_wind>false</enable_wind>
+
+      <sensor name="gps" type="navsat">
+        <pose>0 0 0 0 0 0</pose>
+        <topic>/navsat_kari</topic>
+        <visualize>false</visualize>
+        <navsat>
+          <position_sensing>
+            <horizontal>
+              <noise type="gaussian">
+                  <mean>0.98</mean>
+                  <stddev>0.76</stddev>
+              </noise>
+            </horizontal>
+            <vertical>
+              <noise type="gaussian">
+                  <mean>0.98</mean>
+                  <stddev>0.76</stddev>
+              </noise>
+            </vertical>
+          </position_sensing>
+          <velocity_sensing>
+            <horizontal>
+              <noise type="gaussian">
+                  <mean>0.98</mean>
+                  <stddev>0.76</stddev>
+              </noise>
+            </horizontal>
+            <vertical>
+              <noise type="gaussian">
+                  <mean>0.98</mean>
+                  <stddev>0.76</stddev>
+              </noise>
+            </vertical>
+          </velocity_sensing>
+        </navsat>
+      </sensor>
+    </link>
+    <joint name="gps_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>gps</child>
+    </joint>
+
+
+    <!--mag -->
     <plugin name='gz::sim::systems::OdometryPublisher' filename='gz-sim-odometry-publisher-system'>
       <odom_topic>/gz_odom/</odom_topic>
       <odom_covariance_topic>/gz_odom_covariance/</odom_covariance_topic>
