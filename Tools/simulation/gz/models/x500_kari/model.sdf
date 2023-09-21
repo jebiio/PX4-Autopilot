@@ -244,7 +244,7 @@
       <child>gps</child>
     </joint>
 
-
+    <plugin name='gz::sim::systems::NavSat' filename='gz-sim-navsat-system'/>
     <!--mag -->
     <plugin name='gz::sim::systems::OdometryPublisher' filename='gz-sim-odometry-publisher-system'>
       <odom_topic>/gz_odom/</odom_topic>
