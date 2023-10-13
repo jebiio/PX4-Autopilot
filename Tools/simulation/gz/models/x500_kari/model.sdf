@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
   <model name='x500-Kari'>
+    <pose>-9.35 0 6.5 0 0 0</pose>
     <include merge='true'>
-      <uri>x500</uri>
+      <uri>x500</uri>  
     </include>
     <include merge='true'>
       <uri>realsense_d435</uri>
