@@ -52,13 +52,13 @@
                 </material>
             </visual>
 
-            <sensor name="color" type="camera">
+            <!-- <sensor name="color" type="camera">
                 <pose>0 -0.046 0.004 0 0 0</pose>
                 <camera name="__default__">
                     <horizontal_fov>1.047</horizontal_fov>
                     <image>
-                        <width>640</width>
-                        <height>480</height>
+                        <width>320</width>
+                        <height>240</height>
                         <format>RGB_INT8</format>
                     </image>
                     <clip>
@@ -80,8 +80,8 @@
                 <camera name="__default__">
                     <horizontal_fov>1.047</horizontal_fov>
                     <image>
-                        <width>640</width>
-                        <height>480</height>
+                        <width>320</width>
+                        <height>240</height>
                         <format>L_INT8</format>
                     </image>
                     <clip>
@@ -103,8 +103,8 @@
                 <camera name="__default__">
                     <horizontal_fov>1.047</horizontal_fov>
                     <image>
-                        <width>640</width>
-                        <height>480</height>
+                        <width>320</width>
+                        <height>240</height>
                         <format>L_INT8</format>
                     </image>
                     <clip>
@@ -120,14 +120,14 @@
                 <always_on>1</always_on>
                 <update_rate>10</update_rate>
                 <visualize>0</visualize>
-            </sensor>
+            </sensor> -->
             <sensor name="depth" type="depth">
                 <pose>0 -0.03 0.004 0 0 0</pose>
                 <camera name="__default__">
                     <horizontal_fov>1.047</horizontal_fov>
                     <image>
-                        <width>640</width>
-                        <height>480</height>
+                        <width>320</width>
+                        <height>240</height>
                     </image>
                     <clip>
                         <near>0.1</near>
