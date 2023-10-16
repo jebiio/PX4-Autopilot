@@ -203,7 +203,7 @@
     </include>
     <include>
       <name>Terrain</name>
-      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Harmonic Terrain</uri>
+      <uri>harmonic terrain/1</uri>
     </include>
     <include>
       <name>Terrain Objects</name>
