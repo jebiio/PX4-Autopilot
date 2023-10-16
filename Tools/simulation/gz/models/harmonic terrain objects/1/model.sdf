@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+    <model name="lakehouseterrain">
+        <static>true</static>
+        <link name="base_link">
+            <visual name="RockPile_visual">
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>RockPile</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/RockPile_Albedo.png</albedo_map>
+                            <normal_map>materials/textures/RockPile_Normal.png</normal_map>
+                            <roughness_map>materials/textures/RockPile_Roughness.png</roughness_map>
+                            <metalness>0</metalness>
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>materials/scripts/</uri>
+                        <uri>materials/textures/</uri>
+                        <name>UrbanTile/RockPile_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name="Bush_visual">
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>Bush</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/Bush01_Albedo.png</albedo_map>
+                            <roughness>0.9</roughness>
+                            <metalness>0</metalness>
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>materials/scripts/</uri>
+                        <uri>materials/textures/</uri>
+                        <name>UrbanTile/Bush01_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name="Rock01_visual">
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>Rock01</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/Rock01_Albedo.png</albedo_map>
+                            <normal_map>materials/textures/Rock01_Normal.png</normal_map>
+                            <roughness_map>materials/textures/Rock01_Roughness.png</roughness_map>
+                            <metalness>0</metalness>
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>materials/scripts/</uri>
+                        <uri>materials/textures/</uri>
+                        <name>UrbanTile/Rock01_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name="Rock02_visual">
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>Rock02</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/Rock02_Albedo.png</albedo_map>
+                            <normal_map>materials/textures/Rock02_Normal.png</normal_map>
+                            <roughness_map>materials/textures/Rock02_Roughness.png</roughness_map>
+                            <metalness>0</metalness>
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>materials/scripts/</uri>
+                        <uri>materials/textures/</uri>
+                        <name>UrbanTile/Rock02_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name="JeffreyTreeLeaves_visual">
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>JeffreyTreeLeaves</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/TreeJeffreyPine_Albedo.png</albedo_map>
+                            <roughness>0.9</roughness>
+                            <metalness>0</metalness>
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>materials/scripts/</uri>
+                        <uri>materials/textures/</uri>
+                        <name>UrbanTile/TreeJeffreyPine_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name="JeffreyTreeBark_visual">
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>JeffreyTreeBark</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/Bark_Albedo.png</albedo_map>
+                            <normal_map>materials/textures/Bark_Normal.png</normal_map>
+                            <roughness>0.9</roughness>
+                            <metalness>0</metalness>
+                            <!-- <light_map uv_set="1">materials/textures/LightmapDark.png</light_map> -->
+                        </metal>
+                    </pbr>
+                    <!-- fallback to script if no PBR support-->
+                    <script>
+                        <uri>materials/scripts/</uri>
+                        <uri>materials/textures/</uri>
+                        <name>UrbanTile/Bark_Diffuse</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name="Stump">
+                <cast_shadows>true</cast_shadows>
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>Stump</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/Stump_Albedo.png</albedo_map>
+                            <normal_map>materials/textures/Stump_Normal.png</normal_map>
+                            <metalness>0</metalness>
+                            <roughness>1</roughness>
+                        </metal>
+                    </pbr>
+                </material>
+            </visual>
+            <visual name="Log">
+                <cast_shadows>true</cast_shadows>
+                <geometry>
+                    <mesh>
+                        <uri>meshes/terrainobjects.dae</uri>
+                        <scale>1 1 1</scale>
+                        <submesh>
+                            <name>Log</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/Log_Albedo.png</albedo_map>
+                            <normal_map>materials/textures/Log_Normal.png</normal_map>
+                            <metalness>0</metalness>
+                            <roughness>1</roughness>
+                        </metal>
+                    </pbr>
+                </material>
+            </visual>
+            <visual name="Background Trees">
+                <cast_shadows>false</cast_shadows>
+                <geometry>
+                    <mesh>
+                        <uri>meshes/background_trees.dae</uri>
+                        <scale>1 1 1</scale>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>1.0 1.0 1.0</diffuse>
+                    <specular>1.0 1.0 1.0</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>materials/textures/TreeBillboard_Pine_HS.png</albedo_map>
+                        </metal>
+                    </pbr>
+                </material>
+            </visual>
+        </link>
+    </model>
+</sdf>
