@@ -2,5 +2,6 @@
 
 export PX4_GZ_MODELS=@PX4_SOURCE_DIR@/Tools/simulation/gz/models
 export PX4_GZ_WORLDS=@PX4_SOURCE_DIR@/Tools/simulation/gz/worlds
+export KARI_GZ_MODELS=@PX4_SOURCE_DIR@/Tools/simulation/gz/kari_models
 
-export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:$PX4_GZ_MODELS:$PX4_GZ_WORLDS
+export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:$PX4_GZ_MODELS:$PX4_GZ_WORLDS:$KARI_GZ_MODELS
