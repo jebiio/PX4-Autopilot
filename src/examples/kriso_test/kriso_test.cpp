@@ -73,6 +73,12 @@ int KrisoTest::custom_command(int argc, char *argv[])
 	}else if(!strcmp(argv[0], "5")) {
 		get_instance()->sendAisStatus();
 		return 0;
+	}else if(!strcmp(argv[0], "6")) {
+		get_instance()->sendAisStatus1();
+		return 0;
+	}else if(!strcmp(argv[0], "7")) {
+		get_instance()->sendAisStatus2();
+		return 0;
 	}
 
 	return 0;
@@ -142,8 +148,66 @@ void KrisoTest::sendAisStatus()
 	status.reserved_1  = 5;
 	status.speed       = 2.1;
 	status.accuracy      = 2;
-	status.lon         = 3.1;
-	status.lat         = 3.2;
+	status.lon         = 126.6348025;
+	status.lat         = 37.1820246;
+	status.course      = 3.3;
+	status.heading    = 10;
+	status.second        = 11;
+	status.reserved_2    = 12;
+	status.cs             = 1;
+	status. display        = 2;
+	status.dsc            = 3;
+	status. band           = 4;
+	status.msg22          = 5;
+	status.assigned       = 6;
+	status.raim           = 7;
+	status.radio         = 8;
+
+	_kriso_aisstatus_topic.publish(status);
+	PX4_ERR("send ais status!");
+
+}
+void KrisoTest::sendAisStatus1()
+{
+	kriso_aisstatus_s status{};
+
+	status.msg_type  = 2;
+	status.repeat = 3;
+	status.mmsi  = 14;
+	status.reserved_1  = 5;
+	status.speed       = 2.1;
+	status.accuracy      = 2;
+	status.lon         = 126.6250510;
+	status.lat         = 37.1758709;
+	status.course      = 3.3;
+	status.heading    = 10;
+	status.second        = 11;
+	status.reserved_2    = 12;
+	status.cs             = 1;
+	status. display        = 2;
+	status.dsc            = 3;
+	status. band           = 4;
+	status.msg22          = 5;
+	status.assigned       = 6;
+	status.raim           = 7;
+	status.radio         = 8;
+
+	_kriso_aisstatus_topic.publish(status);
+	PX4_ERR("send ais status!");
+
+}
+void KrisoTest::sendAisStatus2()
+{
+	kriso_aisstatus_s status{};
+
+	status.msg_type  = 2;
+	status.repeat = 3;
+	status.mmsi  = 124;
+	status.reserved_1  = 5;
+	status.speed       = 2.1;
+	status.accuracy      = 2;
+	status.lon         = 126.6249097;
+	status.lat         = 37.1821134;
 	status.course      = 3.3;
 	status.heading    = 10;
 	status.second        = 11;

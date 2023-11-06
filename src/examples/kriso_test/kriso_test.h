@@ -84,6 +84,8 @@ public:
 	void sendControlCmdVcc();
 	void sendLoggingStatus();
 	void sendAisStatus();
+	void sendAisStatus1();
+	void sendAisStatus2();
 private:
 
 	/**
