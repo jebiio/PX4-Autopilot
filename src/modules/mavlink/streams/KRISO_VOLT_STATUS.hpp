@@ -61,7 +61,7 @@ private:
 		if(1){// if (_sensor_gps_sub.update(&gps)) {
 			mavlink_kriso_vol_status_t msg{};
 
-			msg.time_usec = hrt_absolute_time();
+			// msg.time_usec = hrt_absolute_time();
 			msg.ch1_volt = 12.34;
 			msg.ch2_volt = 34.56;
 			msg.ch3_volt = 56.78;
