@@ -61,15 +61,10 @@ private:
 		if(1){// if (_sensor_gps_sub.update(&gps)) {
 			mavlink_kriso_status_t msg{};
 
-			msg.time_usec = hrt_absolute_time();
+			// msg.time_usec = hrt_absolute_time();
 			msg.nav_longitude = 127.1;
 			msg.nav_latitude = 36.1;
-			msg.t1_rpm = 1;
-			msg.t2_rpm = 2;
-			msg.t3_rpm = 3;
-			msg.t3_angle = 4;
-			msg.t4_rpm = 5;
-			msg.t4_angle = 6;
+
 			msg.nav_roll = 7;
 			msg.nav_pitch = 8;
 			msg.nav_yaw = 9;
