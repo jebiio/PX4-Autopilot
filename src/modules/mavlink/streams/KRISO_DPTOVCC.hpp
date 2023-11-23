@@ -8,54 +8,39 @@ class MavlinkStreamKrisoDpToVcc : public MavlinkStream
 public:
 	static MavlinkStream *new_instance(Mavlink *mavlink) { return new MavlinkStreamKrisoDpToVcc(mavlink); }
 
-	static constexpr const char *get_name_static() { return "DPTOVCC"; }
-	static constexpr uint16_t get_id_static() { return MAVLINK_MSG_ID_HOME_POSITION; }
+	static constexpr const char *get_name_static() { return "KRISO_DPTOVCC"; }
+	static constexpr uint16_t get_id_static() { return MAVLINK_MSG_ID_KRISO_DP_TO_VCC; }
 
 	const char *get_name() const override { return get_name_static(); }
 	uint16_t get_id() override { return get_id_static(); }
 
 	unsigned get_size() override
 	{
-		return _home_sub.advertised() ? (MAVLINK_MSG_ID_HOME_POSITION_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES) : 0;
+		return dptovcc_sub.advertised() ? (MAVLINK_MSG_ID_KRISO_DP_TO_VCC_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES) : 0;
 	}
 
 private:
 	explicit MavlinkStreamKrisoDpToVcc(Mavlink *mavlink) : MavlinkStream(mavlink) {}
 
-	uORB::Subscription _home_sub{ORB_ID(kriso_dptovcc)};
+	uORB::Subscription dptovcc_sub{ORB_ID(kriso_dptovcc)};
 
 	bool send() override
 	{
-		// we're sending the GPS home periodically to ensure the
-		// the GCS does pick it up at one point
-		kriso_dptovcc_s home;
+		kriso_dptovcc_s dptovcc{};
+		if (dptovcc_sub.update(&dptovcc)) {
+			mavlink_kriso_dp_to_vcc_t msg{};
 
-		if (kriso_cktovcc.advertised() && kriso_cktovcc.copy(&home)) {
-			if (home.valid_hpos) {
-				mavlink_home_position_t msg{};
+			msg.surge_error = dptovcc.surge_error;
+			msg.sway_error = dptovcc.sway_error;
+			msg.yaw_error = dptovcc.yaw_error;
+			msg.dp_start_stop = dptovcc.dp_start_stop;
 
-				msg.latitude  = home.lat * 1e7;
-				msg.longitude = home.lon * 1e7;
-				msg.altitude  = home.alt * 1e3f;
-
-				msg.x = home.x;
-				msg.y = home.y;
-				msg.z = home.z;
-
-				msg.approach_x = 0.f;
-				msg.approach_y = 0.f;
-				msg.approach_z = 0.f;
-
-				msg.time_usec = home.timestamp;
-
-				mavlink_msg_home_position_send_struct(_mavlink->get_channel(), &msg);
-
-				return true;
-			}
+			mavlink_msg_kriso_dp_to_vcc_send_struct(_mavlink->get_channel(), &msg);
+			PX4_ERR("mavlink kriso dptovcc sent!!!");
+			return true;
 		}
-
 		return false;
 	}
 };
 
-#endif // KRISO_CONTROLCMDTOVCC_HPP
+#endif // KRISO_DPTOVCC_HPP

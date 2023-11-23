@@ -401,7 +401,7 @@ MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
 		case MAVLINK_MSG_ID_KRISO_CA_COMMAND:
 			mavlink_kriso_ca_command_t ca_mavlink;
 			mavlink_msg_kriso_ca_command_decode(msg, &ca_mavlink);
-			PX4_ERR("KRISO_CA_COMMAND: %f, %f", (double)ca_mavlink.ca_alert_range, (double)ca_mavlink.ca_avoid_range);
+			PX4_ERR("KRISO_CA_COMMAND: %f, %f, %f, %f", (double)ca_mavlink.ca_alert_range, (double)ca_mavlink.ca_avoid_range, (double)ca_mavlink.ca_param1, (double)ca_mavlink.ca_param2);
 			break;
 		case MAVLINK_MSG_ID_KRISO_CK_COMMAND:
 			mavlink_kriso_ck_command_t ck_mavlink;
@@ -411,7 +411,7 @@ MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
 		case MAVLINK_MSG_ID_KRISO_CONTROL_COMMAND:
 			mavlink_kriso_control_command_t control_mavlink;
 			mavlink_msg_kriso_control_command_decode(msg, &control_mavlink);
-			PX4_ERR("KRISO_CONTROL_COMMAND: %d, %d, %d", (int)control_mavlink.op_mode, (int)control_mavlink.ca_method, (int)control_mavlink.ca_mode);
+			PX4_ERR("KRISO_CONTROL_COMMAND: %d, %d, %d %d", (int)control_mavlink.op_mode, (int)control_mavlink.mission_mode, (int)control_mavlink.ca_mode, (int)control_mavlink.ca_method);
 			break;
 		case MAVLINK_MSG_ID_KRISO_DP_COMMAND:
 			mavlink_kriso_dp_command_t dp_mavlink;

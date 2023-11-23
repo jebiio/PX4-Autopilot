@@ -123,6 +123,7 @@
 #include "streams/KRISO_CONTROLCMDTOVCC.hpp"
 #include "streams/KRISO_LOGGINGSTATUS.hpp"
 #include "streams/KRISO_AISSTATUS.hpp"
+#include "streams/KRISO_DPTOVCC.hpp"
 
 /*
 #include "streams/KRISO_CATOVCC.hpp"
@@ -595,6 +596,10 @@ static const StreamListItem streams_list[] = {
 #if defined(KRISO_AISSTATUS_HPP)
 	create_stream_list_item<MavlinkStreamKrisoAisStatus>(),
 #endif //KRISO_AISSTATUS_HPP
+#if defined(KRISO_DPTOVCC_HPP)
+	create_stream_list_item<MavlinkStreamKrisoDpToVcc>(),
+#endif //KRISO_DPTOVCC_HPP
+
 };
 
 const char *get_stream_name(const uint16_t msg_id)
