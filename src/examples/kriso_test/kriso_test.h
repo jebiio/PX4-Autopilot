@@ -49,6 +49,7 @@
 #include <uORB/topics/kriso_loggingstatus.h>
 #include <uORB/topics/kriso_aisstatus.h>
 #include <uORB/topics/kriso_dptovcc.h>
+#include <uORB/topics/kriso_plctovcc.h>
 
 using namespace time_literals;
 
@@ -88,6 +89,7 @@ public:
 	void sendAisStatus2();
 	void sendAisStatus3();
 	void sendDPtoVcc();
+	void sendPLCtoVcc();
 private:
 
 	/**
@@ -119,6 +121,7 @@ private:
 	uORB::Publication<kriso_loggingstatus_s> _kriso_loggingstatus_topic{ORB_ID(kriso_loggingstatus)};
 	uORB::Publication<kriso_aisstatus_s> _kriso_aisstatus_topic{ORB_ID(kriso_aisstatus)};
 	// uORB::Publication<kriso_dptovcc_s> _kriso_dptovcc_topic{ORB_ID(kriso_dptovcc)};
+	uORB::Publication<kriso_plctovcc_s> _kriso_plctovcc_topic{ORB_ID(kriso_plctovcc)};
 
 	double lat = 37.340531;
 	double lon = 126.632915;

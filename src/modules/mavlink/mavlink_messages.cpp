@@ -124,6 +124,7 @@
 #include "streams/KRISO_LOGGINGSTATUS.hpp"
 #include "streams/KRISO_AISSTATUS.hpp"
 #include "streams/KRISO_DPTOVCC.hpp"
+#include "streams/KRISO_PLCTOVCC.hpp"
 
 /*
 #include "streams/KRISO_CATOVCC.hpp"
@@ -599,6 +600,9 @@ static const StreamListItem streams_list[] = {
 #if defined(KRISO_DPTOVCC_HPP)
 	create_stream_list_item<MavlinkStreamKrisoDpToVcc>(),
 #endif //KRISO_DPTOVCC_HPP
+#if defined(KRISO_PLCTOVCC_HPP)
+	create_stream_list_item<MavlinkStreamKrisoPlcToVcc>(),
+#endif //KRISO_PLCTOVCC_HPP
 
 };
 

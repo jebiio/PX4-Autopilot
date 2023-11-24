@@ -82,6 +82,9 @@ int KrisoTest::custom_command(int argc, char *argv[])
 	}else if(!strcmp(argv[0], "8")) {
 		get_instance()->sendDPtoVcc();
 		return 0;
+	}else if(!strcmp(argv[0], "9")) {
+		get_instance()->sendPLCtoVcc();
+		return 0;
 	}
 
 	return 0;
@@ -236,7 +239,7 @@ void KrisoTest::sendDPtoVcc()
 	kriso_dptovcc_s dptovcc{};
 
 	dptovcc.timestamp = hrt_absolute_time();
-	dptovcc.surge_error = 1.1;
+	dptovcc.surge_error = 5.1;
 	dptovcc.sway_error = 1.2;
 	dptovcc.yaw_error = 1.3;
 	dptovcc.dp_start_stop = 1;
@@ -247,7 +250,59 @@ void KrisoTest::sendDPtoVcc()
 
 	_kriso_dptovcc_topic.publish(dptovcc);
 	PX4_ERR("send dptovcc status!");
+}
 
+void KrisoTest::sendPLCtoVcc()
+{
+	kriso_plctovcc_s plctovcc{};
+
+	plctovcc.timestamp = hrt_absolute_time();
+	plctovcc.mr_mtr_sta = 1;
+	plctovcc.mr_flt_msg_err1 = 2;
+	plctovcc.mr_flt_msg_err2 = 3;
+	plctovcc.mr_flt_msg_warn1 = 4;
+	plctovcc.mr_flt_msg_warn2 = 5;
+	plctovcc.mr_mtr_curr_real = 6;
+	plctovcc.mr_temp = 7;
+	plctovcc.mr_mtr_rpm_real = 8;
+	plctovcc.mr_mtr_rot_real = 9;
+	plctovcc.ml_mtr_sta = 10;
+	plctovcc.ml_flt_msg_err1 = 11;
+	plctovcc.ml_flt_msg_err2 = 12;
+	plctovcc.ml_flt_msg_warn1 = 13;
+	plctovcc.ml_flt_msg_warn2 = 14;
+	plctovcc.ml_mtr_curr_real = 15;
+	plctovcc.ml_temp = 16;
+	plctovcc.ml_mtr_rpm_real = 17;
+	plctovcc.ml_mtr_rot_real = 18;
+	plctovcc.br_mtr_sta = 19;
+	plctovcc.br_flt_msg = 20;
+	plctovcc.br_mtr_curr_real = 21;
+	plctovcc.br_temp = 22;
+	plctovcc.br_mtr_rpm = 23;
+	plctovcc.br_mtr_rot_sta = 24;
+	plctovcc.bl_mtr_sta = 25;
+	plctovcc.bl_flt_msg = 26;
+	plctovcc.bl_mtr_curr_real = 27;
+	plctovcc.bl_temp = 28;
+	plctovcc.bl_mtr_rpm = 29;
+	plctovcc.bl_mtr_rot_sta = 30;
+	plctovcc.sr_str_rpm = 31;
+	plctovcc.sr_str_ang = 32;
+	plctovcc.sl_str_rpm = 33;
+	plctovcc.sl_str_ang = 34;
+	plctovcc.batt400vdc = 35;
+	plctovcc.batt24vdc_1 = 36;
+	plctovcc.batt24vdc_2 = 37;
+	plctovcc._padding0[0] = 1;
+	plctovcc._padding0[1] = 2;
+	plctovcc._padding0[2] = 3;
+	plctovcc._padding0[3] = 4;
+	plctovcc._padding0[4] = 5;
+	plctovcc._padding0[5] = 6;
+
+	_kriso_plctovcc_topic.publish(plctovcc);
+	PX4_ERR("send plctovcc status!");
 
 }
 
