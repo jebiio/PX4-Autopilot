@@ -416,7 +416,7 @@ MavlinkReceiver::handle_message_kriso(mavlink_message_t *msg)
 		case MAVLINK_MSG_ID_KRISO_DP_COMMAND:
 			mavlink_kriso_dp_command_t dp_mavlink;
 			mavlink_msg_kriso_dp_command_decode(msg, &dp_mavlink);
-			PX4_ERR("KRISO_DP_COMMAND: %f, %f, %f, %f", (double)dp_mavlink.target_wp_lat, (double)dp_mavlink.target_wp_lon, (double)dp_mavlink.dp_surge_dgain, (double)dp_mavlink.dp_sway_dgain);
+			PX4_ERR("KRISO_DP_COMMAND: %f %f, %f, %f, %f, %f", (double)dp_mavlink.targetposition_yaw, (double)dp_mavlink.target_wp_lat, (double)dp_mavlink.target_wp_lon, (double)dp_mavlink.dp_surge_dgain, (double)dp_mavlink.dp_sway_dgain, (double)dp_mavlink.dp_yaw_dgain);
 			break;
 		case MAVLINK_MSG_ID_KRISO_EMERGENCY_COMMAND:
 			mavlink_kriso_emergency_command_t eg_mavlink;

@@ -83,7 +83,7 @@ public:
 
 	void sendStatus();
 	void sendVoltage();
-	void sendControlCmdVcc();
+	void sendControlCmdVcc(int opNum, int missionNum);
 	void sendLoggingStatus();
 	void sendAisStatus1();
 	void sendAisStatus2();

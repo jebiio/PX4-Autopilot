@@ -65,10 +65,10 @@ int KrisoTest::custom_command(int argc, char *argv[])
 		get_instance()->sendVoltage();
 		return 0;
 	} else if(!strcmp(argv[0], "3")) {
-		get_instance()->sendControlCmdVcc();
+		get_instance()->sendControlCmdVcc(1,2);
 		return 0;
-	}else if(!strcmp(argv[0], "4")) {
-		get_instance()->sendLoggingStatus();
+	} else if(!strcmp(argv[0], "4")) {
+		get_instance()->sendControlCmdVcc(2,4);
 		return 0;
 	}else if(!strcmp(argv[0], "5")) {
 		get_instance()->sendAisStatus1();
@@ -118,7 +118,7 @@ void KrisoTest::sendVoltage()
 	PX4_ERR("send voltage status!");
 }
 
-void KrisoTest::sendControlCmdVcc()
+void KrisoTest::sendControlCmdVcc(int opNum, int missionNum)
 {
 	kriso_controlcmdtovcc_s status{};
 	status.timestamp = hrt_absolute_time();
@@ -129,8 +129,8 @@ void KrisoTest::sendControlCmdVcc()
 	status.t3_angle = 1.4;
 	status.t4_rpm = 1.5;
 	status.t4_angle = 1.6;
-	status.oper_mode = 1;
-	status.mission_mode = 2;
+	status.oper_mode = opNum;
+	status.mission_mode = missionNum;
 	_kriso_controlcmdtovcc_topic.publish(status);
 	PX4_ERR("send ControlCmdToVcc status!");
 }
